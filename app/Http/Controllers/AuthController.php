@@ -30,7 +30,7 @@ class AuthController extends Controller
             'required' => 'Perlu diisi!!!',
         ]);
 
-        dd($validate);
+        // dd($validate);
         if (Auth::attempt($validate)) {
             request()->session()->regenerate();
             return redirect()->intended('/dashboard');

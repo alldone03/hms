@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +33,16 @@ Route::middleware('guest')->group(
         });
     }
 );
+Route::middleware('auth')->group(function () {
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
+        Route::get('/', 'index')->name('dashboard');
+    });
+    Route::get('/setting', function () {
+        return view('pages.setting');
+    })->name('setting');
+    Route::controller(AuthController::class)->prefix('auth')->group(function () {
+        Route::get('/logout', 'logout')->name('logout');
+        Route::post('/update', 'updateUser')->name('updateUser');
+        Route::post('/delete/{id}', 'deleteUser')->name('deleteUser');
+    });
+});
