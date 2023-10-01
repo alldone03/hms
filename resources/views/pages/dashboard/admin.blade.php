@@ -494,6 +494,45 @@
 
 
         </div>
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Control Relay</h5>
+                    <div class="row justify-content-around">
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnmasuk" style=" height: 200px; width:200px">
+                                PH UP
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                                PH DOWN
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                                UP A
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                                UP B
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                                Distribusi Air
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                                Pompa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,5 +45,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/logout', 'logout')->name('logout');
         Route::post('/update', 'updateUser')->name('updateUser');
         Route::post('/delete/{id}', 'deleteUser')->name('deleteUser');
+    });
+    Route::controller(HistoryController::class)->prefix('history')->group(function () {
+        Route::get('/', 'index')->name('history');
     });
 });
