@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->foreignId('roles')->constrained('roles')->onDelete('cascade');
-            $table->string('password');
-            $table->string('image')->nullable();
+            $table->foreignId('devices')->constrained('devices')->onDelete('cascade')->onUpdate('cascade');
+            $table->float('suhu');
+            $table->float('ph');
+            $table->integer('tds');
+            $table->integer('ketinggian_air');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('histories');
     }
 };

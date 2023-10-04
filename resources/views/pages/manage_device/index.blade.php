@@ -2,7 +2,7 @@
 
 @section('content')
     @push('title')
-        Dashboard User - @include('pages.component.title')
+        Manage Device - @include('pages.component.title')
     @endpush
     @push('links')
         <link rel="shortcut icon" href="{{ asset('assets/compiled/svg/favicon.svg') }}" type="image/x-icon" />
@@ -13,8 +13,10 @@
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/table-datatable-jquery.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}" />
     @endpush
     @push('scripts')
+        @include('pages.manage_device.add')
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
         <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
         <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
@@ -22,6 +24,59 @@
         <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
         <script src="{{ asset('assets/js/extensions/datatables.min.js') }}"></script>
         <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
+        <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
+        <script>
+            @if (session()->has('success'))
+                Toastify({
+                    text: "{{ session('success') }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4fbe87",
+                }).showToast()
+            @endif
+            $(document).ready(function() {
+                $('#save').click(function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        data: $('#saveDevice').serialize(),
+                        url: "{{ route('managedevice/add') }}",
+                        dataType: "json",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+
+                            Toastify({
+                                text: data.success,
+                                duration: 900,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#4fbe87",
+                            }).showToast()
+                            setTimeout(() => {
+                                window.location.reload();
+
+                            }, 2000);
+                        },
+                        error: function(xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            Toastify({
+                                text: err.message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545",
+                            }).showToast()
+                        }
+                    })
+                });
+            });
+        </script>
     @endpush
 
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
@@ -30,12 +85,19 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>History</h3>
+                <h3>Manage Device</h3>
             </div>
         </div>
     </div>
     <section class="section">
+
         <div class="card">
+            <div class="card-header">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#inlineFormAdd">
+                    Add Device
+                </button>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table" id="table1">
@@ -43,24 +105,44 @@
                             <tr>
                                 <th>No</th>
                                 <th>Device</th>
-                                <th>PH</th>
-                                <th>TDS</th>
-                                <th>SUHU</th>
-                                <th>AIR</th>
-                                <th>Waktu</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($device as $d)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $d->nama_device }}</td>
+                                    <td>
+                                        <div class="flex">
+                                            <div class="row justify-content-md-center">
+                                                <div class="col-md-1">
+                                                    <button type="button" class="btn btn-outline-warning edit"
+                                                        data-bs-id="{{ $d['id'] }}">Edit</button>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <form method="POST"
+                                                        action="{{ route('managedevice') . '/delete/' . $d['id'] }}"
+                                                        onsubmit="return confirm('Are you sure?')">
+                                                        @csrf
 
-                            <tr>
-                                <td>1</td>
-                                <td>Device_1</td>
-                                <td>7.0</td>
-                                <td>440</td>
-                                <td>36</td>
-                                <td>40</td>
-                                <td>2023-09-27 17:18:20</td>
-                            </tr>
+                                                        <input name="_method" type="hidden" class="btn-primary btn-xs"
+                                                            value="DELETE">
+                                                        <button type="submit" class="btn btn-outline-danger">
+                                                            DELETE
+                                                        </button>
+
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

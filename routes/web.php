@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\HistoryController;
+use App\Models\Device;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,5 +50,10 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(HistoryController::class)->prefix('history')->group(function () {
         Route::get('/', 'index')->name('history');
+    });
+    Route::controller(DeviceController::class)->prefix('managedevice')->group(function () {
+        Route::get('/', 'index')->name('managedevice');
+        Route::post('/add', 'store')->name('managedevice/add');
+        Route::delete('/delete/{id}', 'deletedevice')->name('managedevice/delete');
     });
 });

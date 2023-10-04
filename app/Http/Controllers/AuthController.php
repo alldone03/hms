@@ -30,7 +30,6 @@ class AuthController extends Controller
             'required' => 'Perlu diisi!!!',
         ]);
 
-        // dd($validate);
         if (Auth::attempt($validate)) {
             request()->session()->regenerate();
             return redirect()->intended('/dashboard');
@@ -42,6 +41,7 @@ class AuthController extends Controller
     public function registerProcess()
     {
 
+        // dd(request()->all());
         $validate = request()->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -55,7 +55,7 @@ class AuthController extends Controller
             'password.min' => 'Minimal 5 Karakter !!!',
             'username.min' => 'Minimal 5 Karakter !!!'
         ]);
-        $validate['roles'] = 3;
+        $validate['roles'] = 2;
         $validate['password'] = bcrypt(request()->password);
         $data = User::create($validate);
         $data->save();

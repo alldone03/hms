@@ -12,6 +12,33 @@
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}" />
+        <style>
+            .progress-bar-vertical {
+                width: 52px;
+                min-height: 269px;
+                margin-right: 20px;
+                border-radius: 10px !important;
+                display: flex;
+                flex-direction: column-reverse;
+
+            }
+
+            .progress-bar-vertical .progress-bar {
+                width: 100%;
+                height: 0;
+                -webkit-transition: height 0.6s ease;
+                -o-transition: height 0.6s ease;
+                transition: height 0.6s ease;
+
+                display: block;
+            }
+
+            @keyframes grow {
+                from {
+                    transform: scaleY(0);
+                }
+            }
+        </style>
     @endpush
     @push('scripts')
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
@@ -19,17 +46,23 @@
         <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
         <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
         <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
-        <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
 
 
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://code.highcharts.com/highcharts-more.js"></script>
-        <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-        <script src="https://code.highcharts.com/modules/exporting.js"></script>
-        <script src="https://code.highcharts.com/modules/export-data.js"></script>
-        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+        {{-- Gauge --}}
+        <script src="{{ asset('assets/js/extensions/Gauge/highcharts.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/highcharts-more.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/solid-gauge.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/exporting.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/export-data.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/accessibility.js') }}"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        {{-- ----- --}}
+        {{-- Chart --}}
+
+
+        <script src="{{ asset('assets/js/extensions/Chart/chart.js') }}"></script>
+        {{-- ----- --}}
 
         <script>
             // The speed gauge
@@ -425,24 +458,50 @@
         <div class="row">
 
 
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <div id="container-PH" class="chart-container"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <div id="container-TDS" class="chart-container"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <div id="container-SUHU" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <h5 class="card-title" style="text-align: center">Ketinggian Air</h5>
+                        </div>
+
+
+                        <div class="flex row justify-content-center">
+
+                            <div class="col-md-2 col-lg-2">
+                                <div class="progress progress-bar-vertical">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60"
+                                        aria-valuemin="0" aria-valuemax="100" style="height: 60%;">
+                                        <span class="sr-only">60%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
             </div>

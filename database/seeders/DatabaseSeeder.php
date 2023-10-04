@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Device;
+use App\Models\History;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +22,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'aldan@gmail.com',
             'password' => bcrypt('aldan123'),
             'roles' => 1
+        ]);
+        Device::factory()->create([
+            'nama_device' => 'device1',
         ]);
     }
 }

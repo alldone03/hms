@@ -38,13 +38,13 @@
                     <form action="{{ route('registerProcess') }}" method="POST">
                         @csrf
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" id="nama" name="nama"
-                                class="form-control form-control-xl @error('nama') is-invalid @enderror" placeholder="Nama"
-                                value="{{ old('nama') }}" />
+                            <input type="text" id="name" name="name"
+                                class="form-control form-control-xl @error('name') is-invalid @enderror" placeholder="Name"
+                                value="{{ old('name') }}" />
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
-                            @error('nama')
+                            @error('name')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

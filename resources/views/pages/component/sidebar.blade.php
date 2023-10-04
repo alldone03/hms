@@ -12,4 +12,10 @@
             <span>History</span>
         </a>
     </li>
+    <li class="sidebar-item @if (Request::path() == 'managedevice') active @endif">
+        <a href="{{ route('managedevice') }}" class="sidebar-link ">
+            <i class="bi bi-grid-fill"></i>
+            <span>Manage Device</span>
+        </a>
+    </li>
 @endif
