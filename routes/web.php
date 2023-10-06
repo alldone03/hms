@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(DeviceController::class)->prefix('managedevice')->group(function () {
         Route::get('/', 'index')->name('managedevice');
         Route::post('/add', 'store')->name('managedevice/add');
+        Route::get('/edit/{device}', 'edit')->name('managedevice/edit');
+        Route::put('/update/{device}', 'update')->name('managedevice/update');
         Route::delete('/delete/{id}', 'deletedevice')->name('managedevice/delete');
     });
 });

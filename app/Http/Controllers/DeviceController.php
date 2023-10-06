@@ -56,7 +56,7 @@ class DeviceController extends Controller
      */
     public function edit(Device $device)
     {
-        //
+        return response()->json($device);
     }
 
     /**
@@ -64,7 +64,14 @@ class DeviceController extends Controller
      */
     public function update(UpdateDeviceRequest $request, Device $device)
     {
-        //
+        $validate = request()->validate([
+            'nama_device' => 'required|min:5|unique:devices,nama_device,' . $device->id,
+
+        ], [
+            'required' => 'Perlu diisi!!!',
+        ]);
+        $device->update($validate);
+        return response()->json(['success' => 'Device successfully update']);
     }
 
     /**
@@ -77,7 +84,6 @@ class DeviceController extends Controller
     public function deletedevice()
     {
         $device = Device::find(request()->id);
-
         $device->delete();
         return redirect()->back()->with('status', 'Berhasil Delete');
     }

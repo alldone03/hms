@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}" />
     @endpush
     @push('scripts')
+        @include('pages.manage_device.edit')
         @include('pages.manage_device.add')
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
         <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
@@ -73,6 +74,65 @@
                                 backgroundColor: "#dc3545",
                             }).showToast()
                         }
+                    })
+                });
+                $('.edit').on("click", function(e) {
+                    e.preventDefault()
+                    var id = $(this).attr('data-bs-id');
+                    console.log(id);
+
+                    $.ajax({
+                        url: "{{ url()->current() }}/edit/" + id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+
+                            $('#iddevice').val(data.id);
+                            $('#nama_device').val(data.nama_device);
+                            $('#inlineFormEdit').modal('show');
+                        }
+                    });
+                });
+                $('#update').on("click", function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "PUT",
+                        data: $('#updateDevice').serialize(),
+                        url: '{{ url()->current() }}/update/'.concat($('#iddevice')
+                            .val()),
+                        dataType: "json",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+
+                            Toastify({
+                                text: data.success,
+                                duration: 900,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#4fbe87",
+                            }).showToast()
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        },
+                        error: function(data) {
+
+
+                            Toastify({
+                                text: JSON.parse(data.responseText).message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545",
+                            }).showToast();
+                            $('#inlineFormEdit').modal('show');
+
+                        }
+
                     })
                 });
             });
@@ -137,9 +197,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </td>
                                 </tr>
                             @endforeach
