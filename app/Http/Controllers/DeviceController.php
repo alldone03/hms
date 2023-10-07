@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDeviceRequest;
 use App\Http\Requests\UpdateDeviceRequest;
 use App\Models\Device;
+use App\Models\History;
+use App\Models\StateRelay;
 
 class DeviceController extends Controller
 {
@@ -38,6 +40,17 @@ class DeviceController extends Controller
             'required' => 'Perlu diisi!!!',
         ]);
         Device::create($validate);
+        StateRelay::create([
+            'device_id' => Device::latest()->first()->id,
+        ]);
+        History::create([
+            'device_id' => Device::latest()->first()->id,
+            'suhu' => 0.0,
+            'ph' => 0.0,
+            'tds' => 0,
+            'ketinggian_air' => 0,
+
+        ]);
         return response()->json([
             'message' => "Success",
         ]);

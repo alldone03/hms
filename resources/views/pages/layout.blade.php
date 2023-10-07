@@ -1,7 +1,7 @@
 @php
     use App\Models\User;
     use App\Models\roles;
-
+    
 @endphp
 <div id="app">
     <div id="sidebar">
@@ -9,7 +9,9 @@
             <div class="sidebar-header position-relative">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="logo">
-                        <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset="" /></a>
+                        <a href="{{ route('welcome') }}"><img src="./assets/compiled/svg/logo.png" alt="Logo"
+                                srcset="" style="height: 100%;
+    width: 70px;" /></a>
                     </div>
                     <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -83,7 +85,12 @@
                                     <div class="user-img d-flex align-items-center">
                                         <div class="avatar avatar-md">
 
+                                            @if (Auth::user()->image)
+                                                <img
+                                                    src="{{ REQUEST::getSchemeAndHttpHost() . '/' . Auth::user()->image }}" />
+                                            @else
                                                 <img src="{{ asset('assets/compiled/jpg/1.jpg') }}" />
+                                            @endif
 
                                         </div>
                                     </div>
@@ -93,7 +100,7 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                                 style="min-width: 11rem">
                                 <li>
-                                    <h6 class="dropdown-header">Hello, {{ Auth::user()->username }}!</h6>
+                                    <h6 class="dropdown-header">Hello, {{ Auth::user()->name }}!</h6>
                                 </li>
 
                                 <li>

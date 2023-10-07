@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('devices')->constrained('devices')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('device_id')->constrained('devices')->onDelete('cascade')->onUpdate('cascade');
             $table->float('suhu');
             $table->float('ph');
             $table->integer('tds');

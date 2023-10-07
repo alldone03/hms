@@ -48,20 +48,16 @@
                             @csrf
                             <div class="col-lg-6 col-md-12">
                                 <div class="mb-3">
-                                    <label for="nama">Nama</label>
-                                    <input type="text" class="form-control" id="nama" name="nama"
-                                        placeholder="Enter nama" value="{{ Auth::user()->nama }}">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Enter name" value="{{ Auth::user()->name }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control" id="email" name="email"
                                         placeholder="Enter email" value="{{ Auth::user()->email }}">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="username">username</label>
-                                    <input type="text" class="form-control" id="username" name="username"
-                                        placeholder="Enter username" value="{{ Auth::user()->username }}">
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="password">Password</label>
                                     <input type="password" class="form-control" id="password" name="password"

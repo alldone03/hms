@@ -8,19 +8,40 @@
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/auth.css') }}" />
+    <style>
+        .pulse {
+            border-radius: 50%;
+            height: 25px;
+            width: 25px;
+            background-color: #adb5bd;
+            animation: mymove .8s ease-in-out infinite;
+        }
+
+        @keyframes mymove {
+            from {
+                background-color: #adb5bd;
+            }
+
+            to {
+                background-color: #0d6efd;
+            }
+        }
+    </style>
 </head>
 
 <body class="antialiased d-flex justify-content-center align-items-center">
 
     <div class="container text-center">
         <div class="my-5">
-            <img src="{{ asset('assets/logo/CypiralLogo.png') }}" alt="" class="h-auto w-56" />
+            <img src="{{ asset('assets/compiled/svg/logo.png') }}" alt="" class="h-auto w-3"
+                style="width: 400px" />
         </div>
         <br />
-        <div class="d-flex">
-            <div class="rounded-circle"></div>
-            <div class="rounded-circle"></div>
-            <div class="rounded-circle"></div>
+        <div class="d-flex justify-content-center gap-3">
+
+            <div class="rounded-circle pulse"></div>
+            <div class="rounded-circle pulse"></div>
+            <div class="rounded-circle pulse"></div>
         </div>
     </div>
     <footer class="fixed-bottom rounded-lg shadow m-4 justify-center" style="bottom:0;">
@@ -34,6 +55,8 @@
 </body>
 
 <script>
+    var data = 0;
+
     setTimeout(() => {
         window.location.href = "{{ route('login') }}";
     }, 2000);

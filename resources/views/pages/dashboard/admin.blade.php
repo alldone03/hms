@@ -22,7 +22,6 @@
                 flex-direction: column-reverse;
 
             }
-
             .progress-bar-vertical .progress-bar {
                 width: 100%;
                 height: 0;
@@ -317,9 +316,113 @@
                     }
                 }]
             }));
+            var chartKetinggianAir = Highcharts.chart('container-ketinggianair', Highcharts.merge({
+                chart: {
+                    type: 'solidgauge',
+                    backgroundColor: 'transparent',
+                    width: 300,
+                    height: 300,
+                },
+                title: {
+                    text: 'SUHU',
+                    style: {
+                        color: '#c2c2d9',
+                    },
+                },
+                pane: {
+                    center: ['50%', '65%'],
+                    size: '100%',
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: {
+                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                        // backgroundColor: 'transparent',
+                        innerRadius: '60%',
+                        outerRadius: '100%',
+                        shape: 'arc'
+                    }
+                },
+                exporting: {
+                    enabled: false
+                },
+
+                tooltip: {
+                    enabled: false
+                },
+                // the value axis
+                yAxis: {
+                    stops: [
+                        [0.1, '#DF5353'], // green
+                        [0.5, '#DDDF0D'], // yellow
+                        [0.9, '#55BF3B'] // red
+                    ],
+                    lineWidth: 0,
+                    tickWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 2,
+                    title: {
+                        y: -70
+                    },
+                    labels: {
+                        y: 16
+                    }
+                },
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            y: 5,
+                            borderWidth: 0,
+                            useHTML: true
+                        }
+                    }
+                }
+            }, {
+                yAxis: {
+                    min: 0,
+                    max: 14,
+
+                },
+
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'SUHU',
+                    data: [0],
+                    dataLabels: {
+                        format: '<div style="text-align:center">' +
+                            '<span style="font-size:25px; color:#c2c2d9;">{y}</span><br/>' +
+                            '<span style="font-size:12px;opacity:0.4;color:#c2c2d9;">&degC</span>' +
+                            '</div>'
+                    },
+                    tooltip: {
+                        //
+                    }
+                }]
+            }));
         </script>
         <script>
             const chartph = new Chart(document.getElementById('Chart-PH'), {
+                type: 'line',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: 'PH',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderWidth: 1
+                    }]
+                },
+
+                options: {
+                    animations: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            const chartketinggianair = new Chart(document.getElementById('Chart-ketinggianair'), {
                 type: 'line',
                 data: {
                     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -383,6 +486,7 @@
             var dataph = [];
             var datatds = [];
             var datasuhu = [];
+            var dataketinggianair = [];
             var time = [];
 
             setInterval(function() {
@@ -391,6 +495,7 @@
                 const data_ph = (Math.random(0, 14) * 10).toFixed(2);
                 const data_tds = (Math.random(0, 14) * 10).toFixed(2);
                 const data_suhu = (Math.random(0, 14) * 10).toFixed(2);
+                const data_ketinggianair = (Math.random(0, 14) * 10).toFixed(2);
 
                 if (chartPH) {
                     chartPH.series[0].points[0].update(parseFloat(data_ph));
@@ -400,6 +505,9 @@
                 }
                 if (chartSUHU) {
                     chartSUHU.series[0].points[0].update(parseFloat(data_suhu));
+                }
+                if (chartKetinggianAir) {
+                    chartKetinggianAir.series[0].points[0].update(parseFloat(data_suhu));
                 }
 
                 time.push(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + " " + today
@@ -417,6 +525,10 @@
                     datasuhu.pop();
                     datasuhu.reverse();
 
+                    dataketinggianair.reverse();
+                    dataketinggianair.pop();
+                    dataketinggianair.reverse();
+
 
                     time.reverse();
                     time.pop();
@@ -425,16 +537,20 @@
                 dataph.push(parseFloat(data_ph));
                 datatds.push(parseFloat(data_tds));
                 datasuhu.push(parseFloat(data_suhu));
+                dataketinggianair.push(parseFloat(data_ketinggianair));
 
 
 
                 chartph.data.labels = time;
                 charttds.data.labels = time;
                 chartsuhu.data.labels = time;
+                chartketinggianair.data.labels = time;
+
 
                 chartph.data.datasets[0].data = dataph;
                 charttds.data.datasets[0].data = datatds;
                 chartsuhu.data.datasets[0].data = datasuhu;
+                chartketinggianair.data.datasets[0].data = dataketinggianair;
                 charttds.update();
                 chartsuhu.update();
                 chartph.update();
@@ -451,6 +567,14 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Dashboard</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <select class="form-select" name="selectdevice" id="selectdevice">
+                    <option selected="" value="0">-</option>
+                    @foreach ($device as $d)
+                        <option value="{{ $d->id }}">{{ $d->nama_device }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
     </div>
@@ -537,13 +661,22 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="col-sm-12 col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Graph SUHU</h5>
                             <div class="row justify-content-center">
                                 <canvas id="Chart-SUHU"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Graph Ketinggian Air</h5>
+                            <div class="row justify-content-center">
+                                <canvas id="Chart-ketinggianair"></canvas>
                             </div>
                         </div>
                     </div>

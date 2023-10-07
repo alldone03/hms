@@ -77,8 +77,8 @@ class AuthController extends Controller
         ]);
         // dd($validated);
         $user = User::find(Auth::user()->id);
-        if ($user->pathuserpicture) {
-            unlink($user->pathuserpicture);
+        if ($user->image) {
+            unlink($user->image);
         }
         $webp_image = convertImage::make(request()->file('file'))->encode('webp', 90)->save('storage/images/' . request()->file('file')->hashName() . '.webp');
 
@@ -86,7 +86,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => request()['email'],
             'password' => bcrypt($validated['password']),
-            'pathuserpicture' => $webp_image->basePath(),
+            'image' => $webp_image->basePath(),
         ]);
         if (!$hasil) {
             return redirect()->back()->withErrors(['msg' => 'Gagal Update']);
@@ -96,8 +96,8 @@ class AuthController extends Controller
     public function deleteuser()
     {
         $user = User::find(request()->id);
-        if ($user->pathuserpicture) {
-            unlink($user->pathuserpicture);
+        if ($user->image) {
+            unlink($user->image);
         }
         $user->delete();
         return redirect()->back()->with('status', 'Berhasil Delete');

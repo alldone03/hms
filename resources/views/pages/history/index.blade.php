@@ -13,6 +13,11 @@
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/table-datatable-jquery.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
+        {{-- Choise CSS --}}
+        <link rel="stylesheet" href="{{ asset('assets/extensions/choices.js/public/assets/styles/choices.css') }}" />
+        {{-- Datatables --}}
+        <link rel="stylesheet"
+            href="{{ asset('assets/extensions/datatables/cdn.datatables.net_buttons_2.4.2_css_buttons.dataTables.min.css') }}" />
     @endpush
     @push('scripts')
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
@@ -21,7 +26,121 @@
 
         <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
         <script src="{{ asset('assets/js/extensions/datatables.min.js') }}"></script>
-        <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
+
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+        {{-- Choise JS --}}
+
+
+        <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/form-element-select.js') }}"></script>
+        <script>
+            @if (session()->has('success'))
+                Toastify({
+                    text: "{{ session('success') }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4fbe87",
+                }).showToast()
+            @endif
+            $(document).ready(function() {
+                let jquery_datatable = $("#table1").DataTable({})
+
+                const setTableColor = () => {
+                    document.querySelectorAll('.dataTables_paginate .pagination').forEach(dt => {
+                        dt.classList.add('pagination-primary')
+                    })
+                }
+                setTableColor()
+                jquery_datatable.on('draw', setTableColor)
+
+                function convertDateToIndonesianFormat(dateString) {
+                    const date = new Date(dateString);
+                    const day = date.getDate();
+                    const month = date.getMonth();
+                    const year = date.getFullYear();
+                    const hour = date.getHours();
+                    const minute = date.getMinutes();
+                    const second = date.getSeconds();
+
+
+                    const monthNames = [
+                        "Januari",
+                        "Februari",
+                        "Maret",
+                        "April",
+                        "Mei",
+                        "Juni",
+                        "Juli",
+                        "Agustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Desember",
+                    ];
+                    const indonesianMonthName = monthNames[month];
+
+
+                    const formattedDate =
+                        `${day} ${indonesianMonthName} ${year} ${hour<10?"0"+hour:hour}:${minute<10?"0"+minute:minute}:${second<10?"0"+second:second}`;
+
+                    return formattedDate;
+                }
+
+                $('#submithistory').click(function(e) {
+                    e.preventDefault();
+                    var device = $('#selectdevice').val();
+                    var startdate = $('#startdate').val();
+                    var enddate = $('#enddate').val();
+                    console.log(startdate);
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('history') }}",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            device: device,
+                            startdate: startdate,
+                            enddate: enddate,
+                        },
+                        success: function(data) {
+                            $('#table1').DataTable().destroy();
+                            $('#table1 tbody').empty();
+                            var no = 1;
+                            $.each(data.history, function(index, value) {
+                                $('#table1 tbody').append(
+                                    '<tr><td>' + no++ + '</td><td>' + value
+                                    .device.nama_device + '</td><td>' + value.ph +
+                                    '</td><td>' + value.tds + '</td><td>' +
+                                    value.suhu + '</td><td>' + value.ketinggian_air +
+                                    '</td><td>' + String(
+                                        convertDateToIndonesianFormat(value
+                                            .created_at)) +
+                                    '</td></tr>'
+                                );
+                            });
+                            $('#table1').DataTable({
+                                dom: 'Bfrtip',
+                                orderFixed: [
+                                    [6, 'desc']
+                                ],
+                                buttons: [
+                                    'copy', 'csv', 'excel', 'pdf', 'print'
+                                ]
+                            });
+                        }
+                    });
+
+                });
+            });
+        </script>
     @endpush
 
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
@@ -34,6 +153,52 @@
             </div>
         </div>
     </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 for="startdate">Select Device</h6>
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelect01">Select</label>
+                                    <select class="form-select" name="selectdevice" id="selectdevice">
+                                        <option selected="" value="0">All Devices</option>
+                                        @foreach ($device as $d)
+                                            <option value="{{ $d->id }}">{{ $d->nama_device }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h6 for="startdate">Start Date</h6>
+                                <input type="date" class="form-control" id="startdate">
+                            </div>
+                            <div class="col-md-4">
+                                <h6 for="enddate">End Date</h6>
+                                <input type="date" class="form-control" id="enddate">
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="card-footer d-flex justify-content-end">
+                                <button class="btn btn-primary"id="submithistory">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </section>
     <section class="section">
         <div class="card">
             <div class="card-body">
@@ -52,15 +217,6 @@
                         </thead>
                         <tbody>
 
-                            <tr>
-                                <td>1</td>
-                                <td>Device_1</td>
-                                <td>7.0</td>
-                                <td>440</td>
-                                <td>36</td>
-                                <td>40</td>
-                                <td>2023-09-27 17:18:20</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

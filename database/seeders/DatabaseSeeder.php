@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('aldan123'),
             'roles' => 1
         ]);
-        Device::factory()->create([
-            'nama_device' => 'device1',
-        ]);
+        // Device::factory()->create([
+        //     'nama_device' => 'device1',
+        // ]);
     }
 }

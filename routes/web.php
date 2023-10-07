@@ -34,6 +34,7 @@ Route::middleware('guest')->group(
             Route::post('/login', 'loginProcess')->name('loginProcess');
             Route::post('/register', 'registerProcess')->name('registerProcess');
         });
+        Route::get('/logdevice', [HistoryController::class, 'logdevice'])->name('logdevice');
     }
 );
 Route::middleware('auth')->group(function () {
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(HistoryController::class)->prefix('history')->group(function () {
         Route::get('/', 'index')->name('history');
+        Route::post('/', 'history')->name('historyget');
     });
     Route::controller(DeviceController::class)->prefix('managedevice')->group(function () {
         Route::get('/', 'index')->name('managedevice');

@@ -49,9 +49,10 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(data) {
+                            // console.log(data);
 
                             Toastify({
-                                text: data.success,
+                                text: data.message,
                                 duration: 900,
                                 close: true,
                                 gravity: "top",
@@ -106,6 +107,7 @@
                         },
                         success: function(data) {
 
+
                             Toastify({
                                 text: data.success,
                                 duration: 900,
@@ -119,7 +121,6 @@
                             }, 2000);
                         },
                         error: function(data) {
-
 
                             Toastify({
                                 text: JSON.parse(data.responseText).message,
