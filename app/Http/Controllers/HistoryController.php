@@ -50,7 +50,7 @@ class HistoryController extends Controller
     }
     public function history()
     {
-        // dd(request()->all());
+
         if (request()->device == "0") {
 
             if (request()->startdate != null && request()->enddate != null) {

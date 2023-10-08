@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('state_relays', function (Blueprint $table) {
             $table->id();
             $table->foreignId('device_id')->constrained('devices')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('Auto')->default(false);
+            $table->boolean('Auto')->default(true);
             $table->boolean('relay_1')->default(false);
             $table->boolean('relay_2')->default(false);
             $table->boolean('relay_3')->default(false);

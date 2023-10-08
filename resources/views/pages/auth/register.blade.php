@@ -18,10 +18,9 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="auth-logo">
-                        <a href="{{ route('welcome') }}"><img src="{{ asset('assets/compiled/svg/logo.svg') }}"
-                                alt="Logo" /></a>
-                    </div>
+                    <a href="{{ route('welcome') }}"><img src="{{ asset('assets/compiled/svg/logo.png') }}"
+                            style="height: 100%;
+    width: 150px;" alt="Logo" /></a>
                     <h1 class="auth-title">Sign Up</h1>
 
                     @if ($errors->any())

@@ -40,6 +40,7 @@ Route::middleware('guest')->group(
 Route::middleware('auth')->group(function () {
     Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
         Route::get('/', 'index')->name('dashboard');
+        Route::get('/getdata/{id}', 'gethistoryfend')->name('dashboard/getdata');
     });
     Route::get('/setting', function () {
         return view('pages.setting');

@@ -22,6 +22,7 @@
                 flex-direction: column-reverse;
 
             }
+
             .progress-bar-vertical .progress-bar {
                 width: 100%;
                 height: 0;
@@ -40,6 +41,9 @@
         </style>
     @endpush
     @push('scripts')
+        <script>
+            const myserver = "{{ url('') }}";
+        </script>
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
         <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
         <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
@@ -61,504 +65,11 @@
 
 
         <script src="{{ asset('assets/js/extensions/Chart/chart.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/gaugeinit.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/chartinit.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/dashboard.js') }}"></script>
+
         {{-- ----- --}}
-
-        <script>
-            // The speed gauge
-            var chartPH = Highcharts.chart('container-PH', Highcharts.merge({
-                chart: {
-                    type: 'solidgauge',
-                    backgroundColor: 'transparent',
-                    width: 300,
-                    height: 300,
-                },
-                title: {
-                    text: 'PH',
-                    style: {
-                        color: '#c2c2d9',
-                    },
-                },
-                pane: {
-                    center: ['50%', '65%'],
-                    size: '100%',
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: {
-                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                        // backgroundColor: 'transparent',
-                        innerRadius: '60%',
-                        outerRadius: '100%',
-                        shape: 'arc'
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-
-                tooltip: {
-                    enabled: false
-                },
-                // the value axis
-                yAxis: {
-                    stops: [
-                        [0.1, '#DF5353'], // green
-                        [0.5, '#DDDF0D'], // yellow
-                        [0.9, '#55BF3B'] // red
-                    ],
-                    lineWidth: 0,
-                    tickWidth: 0,
-                    minorTickInterval: null,
-                    tickAmount: 2,
-                    title: {
-                        y: -70
-                    },
-                    labels: {
-                        y: 16
-                    }
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            y: 5,
-                            borderWidth: 0,
-                            useHTML: true
-                        }
-                    }
-                }
-            }, {
-                yAxis: {
-                    min: 0,
-                    max: 14,
-
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'PH',
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center">' +
-                            '<span style="font-size:25px; color:#c2c2d9;">{y}</span><br/>' +
-                            '<span style="font-size:12px;opacity:0.4;color:#c2c2d9;">PH</span>' +
-                            '</div>'
-                    },
-                    tooltip: {
-                        //
-                    }
-                }]
-            }));
-            var chartTDS = Highcharts.chart('container-TDS', Highcharts.merge({
-                chart: {
-                    type: 'solidgauge',
-                    backgroundColor: 'transparent',
-                    width: 300,
-                    height: 300,
-                },
-                title: {
-                    text: 'TDS',
-                    style: {
-                        color: '#c2c2d9',
-                    },
-                },
-                pane: {
-                    center: ['50%', '65%'],
-                    size: '100%',
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: {
-                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                        // backgroundColor: 'transparent',
-                        innerRadius: '60%',
-                        outerRadius: '100%',
-                        shape: 'arc'
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-
-                tooltip: {
-                    enabled: false
-                },
-                // the value axis
-                yAxis: {
-                    stops: [
-                        [0.1, '#DF5353'], // green
-                        [0.5, '#DDDF0D'], // yellow
-                        [0.9, '#55BF3B'] // red
-                    ],
-                    lineWidth: 0,
-                    tickWidth: 0,
-                    minorTickInterval: null,
-                    tickAmount: 2,
-                    title: {
-                        y: -70
-                    },
-                    labels: {
-                        y: 16
-                    }
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            y: 5,
-                            borderWidth: 0,
-                            useHTML: true
-                        }
-                    }
-                }
-            }, {
-                yAxis: {
-                    min: 0,
-                    max: 14,
-
-                },
-
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'TDS',
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center">' +
-                            '<span style="font-size:25px; color:#c2c2d9;">{y}</span><br/>' +
-                            '<span style="font-size:12px;opacity:0.4;color:#c2c2d9;">PPM</span>' +
-                            '</div>'
-                    },
-                    tooltip: {
-                        //
-                    }
-                }]
-            }));
-            var chartSUHU = Highcharts.chart('container-SUHU', Highcharts.merge({
-                chart: {
-                    type: 'solidgauge',
-                    backgroundColor: 'transparent',
-                    width: 300,
-                    height: 300,
-                },
-                title: {
-                    text: 'SUHU',
-                    style: {
-                        color: '#c2c2d9',
-                    },
-                },
-                pane: {
-                    center: ['50%', '65%'],
-                    size: '100%',
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: {
-                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                        // backgroundColor: 'transparent',
-                        innerRadius: '60%',
-                        outerRadius: '100%',
-                        shape: 'arc'
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-
-                tooltip: {
-                    enabled: false
-                },
-                // the value axis
-                yAxis: {
-                    stops: [
-                        [0.1, '#DF5353'], // green
-                        [0.5, '#DDDF0D'], // yellow
-                        [0.9, '#55BF3B'] // red
-                    ],
-                    lineWidth: 0,
-                    tickWidth: 0,
-                    minorTickInterval: null,
-                    tickAmount: 2,
-                    title: {
-                        y: -70
-                    },
-                    labels: {
-                        y: 16
-                    }
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            y: 5,
-                            borderWidth: 0,
-                            useHTML: true
-                        }
-                    }
-                }
-            }, {
-                yAxis: {
-                    min: 0,
-                    max: 14,
-
-                },
-
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'SUHU',
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center">' +
-                            '<span style="font-size:25px; color:#c2c2d9;">{y}</span><br/>' +
-                            '<span style="font-size:12px;opacity:0.4;color:#c2c2d9;">&degC</span>' +
-                            '</div>'
-                    },
-                    tooltip: {
-                        //
-                    }
-                }]
-            }));
-            var chartKetinggianAir = Highcharts.chart('container-ketinggianair', Highcharts.merge({
-                chart: {
-                    type: 'solidgauge',
-                    backgroundColor: 'transparent',
-                    width: 300,
-                    height: 300,
-                },
-                title: {
-                    text: 'SUHU',
-                    style: {
-                        color: '#c2c2d9',
-                    },
-                },
-                pane: {
-                    center: ['50%', '65%'],
-                    size: '100%',
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: {
-                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                        // backgroundColor: 'transparent',
-                        innerRadius: '60%',
-                        outerRadius: '100%',
-                        shape: 'arc'
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-
-                tooltip: {
-                    enabled: false
-                },
-                // the value axis
-                yAxis: {
-                    stops: [
-                        [0.1, '#DF5353'], // green
-                        [0.5, '#DDDF0D'], // yellow
-                        [0.9, '#55BF3B'] // red
-                    ],
-                    lineWidth: 0,
-                    tickWidth: 0,
-                    minorTickInterval: null,
-                    tickAmount: 2,
-                    title: {
-                        y: -70
-                    },
-                    labels: {
-                        y: 16
-                    }
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            y: 5,
-                            borderWidth: 0,
-                            useHTML: true
-                        }
-                    }
-                }
-            }, {
-                yAxis: {
-                    min: 0,
-                    max: 14,
-
-                },
-
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'SUHU',
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center">' +
-                            '<span style="font-size:25px; color:#c2c2d9;">{y}</span><br/>' +
-                            '<span style="font-size:12px;opacity:0.4;color:#c2c2d9;">&degC</span>' +
-                            '</div>'
-                    },
-                    tooltip: {
-                        //
-                    }
-                }]
-            }));
-        </script>
-        <script>
-            const chartph = new Chart(document.getElementById('Chart-PH'), {
-                type: 'line',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: 'PH',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-
-                options: {
-                    animations: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            const chartketinggianair = new Chart(document.getElementById('Chart-ketinggianair'), {
-                type: 'line',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: 'PH',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-
-                options: {
-                    animations: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            const charttds = new Chart(document.getElementById('Chart-TDS'), {
-                type: 'line',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: 'TDS',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    animations: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            const chartsuhu = new Chart(document.getElementById('Chart-SUHU'), {
-                type: 'line',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: 'SUHU',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    animations: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        </script>
-
-        <script>
-            var dataph = [];
-            var datatds = [];
-            var datasuhu = [];
-            var dataketinggianair = [];
-            var time = [];
-
-            setInterval(function() {
-                // Speed
-                var today = new Date();
-                const data_ph = (Math.random(0, 14) * 10).toFixed(2);
-                const data_tds = (Math.random(0, 14) * 10).toFixed(2);
-                const data_suhu = (Math.random(0, 14) * 10).toFixed(2);
-                const data_ketinggianair = (Math.random(0, 14) * 10).toFixed(2);
-
-                if (chartPH) {
-                    chartPH.series[0].points[0].update(parseFloat(data_ph));
-                }
-                if (chartTDS) {
-                    chartTDS.series[0].points[0].update(parseFloat(data_tds));
-                }
-                if (chartSUHU) {
-                    chartSUHU.series[0].points[0].update(parseFloat(data_suhu));
-                }
-                if (chartKetinggianAir) {
-                    chartKetinggianAir.series[0].points[0].update(parseFloat(data_suhu));
-                }
-
-                time.push(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + " " + today
-                    .getHours() + ":" + today.getMinutes() + ":" + today.getSeconds());
-                if (dataph.length > 10) {
-                    dataph.reverse();
-                    dataph.pop();
-                    dataph.reverse();
-
-                    datatds.reverse();
-                    datatds.pop();
-                    datatds.reverse();
-
-                    datasuhu.reverse();
-                    datasuhu.pop();
-                    datasuhu.reverse();
-
-                    dataketinggianair.reverse();
-                    dataketinggianair.pop();
-                    dataketinggianair.reverse();
-
-
-                    time.reverse();
-                    time.pop();
-                    time.reverse();
-                }
-                dataph.push(parseFloat(data_ph));
-                datatds.push(parseFloat(data_tds));
-                datasuhu.push(parseFloat(data_suhu));
-                dataketinggianair.push(parseFloat(data_ketinggianair));
-
-
-
-                chartph.data.labels = time;
-                charttds.data.labels = time;
-                chartsuhu.data.labels = time;
-                chartketinggianair.data.labels = time;
-
-
-                chartph.data.datasets[0].data = dataph;
-                charttds.data.datasets[0].data = datatds;
-                chartsuhu.data.datasets[0].data = datasuhu;
-                chartketinggianair.data.datasets[0].data = dataketinggianair;
-                charttds.update();
-                chartsuhu.update();
-                chartph.update();
-
-                //chart update
-
-            }, 2000);
-        </script>
     @endpush
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     @extends('pages.layout')
@@ -689,35 +200,48 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Control Relay</h5>
+                    <div class="card-title">
+                        <div class="d-flex gap-2">
+                            <h5 style="text-align: center">
+                                Control Relay
+                            </h5>
+                            <div class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="0">AUTO</div>
+                        </div>
+                    </div>
                     <div class="row justify-content-around">
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnmasuk" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="1"
+                                style=" height: 200px; width:200px">
                                 PH UP
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="2"
+                                style=" height: 200px; width:200px">
                                 PH DOWN
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="3"
+                                style=" height: 200px; width:200px">
                                 UP A
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="4"
+                                style=" height: 200px; width:200px">
                                 UP B
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="5"
+                                style=" height: 200px; width:200px">
                                 Distribusi Air
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-danger btnkeluar" style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="6"
+                                style=" height: 200px; width:200px">
                                 Pompa
                             </button>
                         </div>
@@ -725,9 +249,6 @@
                 </div>
             </div>
         </div>
-
-
-
     </section>
 @endsection
 @endsection

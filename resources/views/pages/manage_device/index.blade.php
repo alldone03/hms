@@ -80,7 +80,7 @@
                 $('.edit').on("click", function(e) {
                     e.preventDefault()
                     var id = $(this).attr('data-bs-id');
-                    console.log(id);
+                    // console.log(id);
 
                     $.ajax({
                         url: "{{ url()->current() }}/edit/" + id,
