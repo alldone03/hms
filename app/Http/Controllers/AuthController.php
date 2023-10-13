@@ -55,8 +55,9 @@ class AuthController extends Controller
             'password.min' => 'Minimal 5 Karakter !!!',
             'username.min' => 'Minimal 5 Karakter !!!'
         ]);
-        $validate['roles'] = 2;
+        $validate['roles'] = 1;
         $validate['password'] = bcrypt(request()->password);
+        // dd($validate);
         $data = User::create($validate);
         $data->save();
         return redirect()->route('login')->with('status', 'Register Berhasil');

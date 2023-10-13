@@ -67,13 +67,18 @@ $(document).ready(function () {
     });
     $("#selectdevice").change(function () {
         btncontrol = [0, 0, 0, 0, 0, 0, 0];
+        btncontrol.forEach((element, index) => {
+            $(`.mybtncontrol[mybtn-attr-id="${index}"]`)
+                .removeClass("btn-outline-danger")
+                .removeClass("btn-outline-success")
+                .addClass("btn-outline-secondary");
+        });
         $.ajax({
             type: "GET",
             dataType: "json",
             data: {
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
-
             url: myserver + "/dashboard/getdata/" + $("#selectdevice").val(),
             success: function (data) {
                 data.datarelay.forEach((element, index) => {
@@ -160,6 +165,11 @@ $(document).ready(function () {
                     if (chartSUHU) {
                         chartSUHU.series[0].points[0].update(
                             parseFloat(datasuhu[0])
+                        );
+                    }
+                    if (chartKETINGGIANAIR) {
+                        chartKETINGGIANAIR.series[0].points[0].update(
+                            parseFloat(dataketinggianair[0])
                         );
                     }
 

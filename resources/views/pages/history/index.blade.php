@@ -2,7 +2,7 @@
 
 @section('content')
     @push('title')
-        Dashboard User - @include('pages.component.title')
+        History - @include('pages.component.title')
     @endpush
     @push('links')
         <link rel="shortcut icon" href="{{ asset('assets/compiled/svg/favicon.svg') }}" type="image/x-icon" />
@@ -95,6 +95,11 @@
 
                 $('#submithistory').click(function(e) {
                     e.preventDefault();
+                    if ($(this).html() == '<div class="spinner-border text-light" role="status">') {
+                        alert("hello");
+                        return
+                    }
+                    $(this).html('<div class="spinner-border text-light" role="status">');
                     var device = $('#selectdevice').val();
                     var startdate = $('#startdate').val();
                     var enddate = $('#enddate').val();
@@ -111,6 +116,7 @@
                             enddate: enddate,
                         },
                         success: function(data) {
+                            $('#submithistory').html('<div>Submit</div>');
                             $('#table1').DataTable().destroy();
                             $('#table1 tbody').empty();
                             var no = 1;
@@ -135,6 +141,7 @@
                                     'copy', 'csv', 'excel', 'pdf', 'print'
                                 ]
                             });
+
                         }
                     });
 
@@ -187,7 +194,9 @@
                         <div class="row">
 
                             <div class="card-footer d-flex justify-content-end">
-                                <button class="btn btn-primary"id="submithistory">Submit</button>
+                                <button class="btn btn-primary"id="submithistory">Submit
+
+                                </button>
                             </div>
                         </div>
                     </div>

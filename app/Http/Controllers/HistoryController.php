@@ -37,11 +37,9 @@ class HistoryController extends Controller
                 'ketinggian_air' => request()->ketinggian_air,
             ]);
             $dataRelay = StateRelay::where('device_id', '=', $device->id)->first();
-            return response()->json([
-                'message' => "Success",
-                'relaystate' => $dataRelay->Auto . $dataRelay->relay_1 . $dataRelay->relay_2 . $dataRelay->relay_3 . $dataRelay->relay_4 . $dataRelay->relay_5 . $dataRelay->relay_6,
-                // respon mulai dari Auto , relay_1, relay_2, dst
-            ]);
+            return response()->json(
+                $dataRelay->Auto . $dataRelay->relay_1 . $dataRelay->relay_2 . $dataRelay->relay_3 . $dataRelay->relay_4 . $dataRelay->relay_5 . $dataRelay->relay_6
+            );
         } else {
             return response()->json([
                 'message' => "ERROR",

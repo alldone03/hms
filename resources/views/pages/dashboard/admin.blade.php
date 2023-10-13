@@ -117,26 +117,7 @@
             <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <div class="card-body">
-
-                        <div class="row">
-
-                            <h5 class="card-title" style="text-align: center">Ketinggian Air</h5>
-                        </div>
-
-
-                        <div class="flex row justify-content-center">
-
-                            <div class="col-md-2 col-lg-2">
-                                <div class="progress progress-bar-vertical">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60"
-                                        aria-valuemin="0" aria-valuemax="100" style="height: 60%;">
-                                        <span class="sr-only">60%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
+                        <div id="container-KetinggianAir" class="chart-container"></div>
                     </div>
                 </div>
             </div>
