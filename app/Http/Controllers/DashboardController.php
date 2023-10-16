@@ -20,15 +20,33 @@ class DashboardController extends Controller
     {
 
         if (request()->buttonstate) {
-            StateRelay::where('device_id', '=', request()->id)->update([
-                'Auto' => request()->buttonstate[0],
-                'relay_1' => request()->buttonstate[1],
-                'relay_2' => request()->buttonstate[2],
-                'relay_3' => request()->buttonstate[3],
-                'relay_4' => request()->buttonstate[4],
-                'relay_5' => request()->buttonstate[5],
-                'relay_6' => request()->buttonstate[6],
-            ]);
+            //jika auto = 1 maka update matikan relay
+            // ketika auto = 0 maka update relay yang di klik
+            if (request()->buttonstate[0] == 1) {
+                if (StateRelay::where('device_id', '=', request()->id)->Auto == 1 && request()->buttonstate[0] == 0) {
+                    StateRelay::where('device_id', '=', request()->id)->update([
+                        'Auto' => request()->buttonstate[0],
+                        'relay_1' => 0,
+                        'relay_2' => 0,
+                        'relay_3' => 0,
+                        'relay_4' => 0,
+                        'relay_5' => 0,
+                        'relay_6' => 0,
+                    ]);
+                }
+            } else {
+                StateRelay::where('device_id', '=', request()->id)->update([
+                    'Auto' => request()->buttonstate[0],
+                    'relay_1' => request()->buttonstate[1],
+                    'relay_2' => request()->buttonstate[2],
+                    'relay_3' => request()->buttonstate[3],
+                    'relay_4' => request()->buttonstate[4],
+                    'relay_5' => request()->buttonstate[5],
+                    'relay_6' => request()->buttonstate[6],
+                ]);
+            }
+
+
             $data20 = History::where('device_id', '=', request()->id)->orderBy('created_at', 'desc')->take(20)->get();
             $relay = StateRelay::where('device_id', '=', request()->id)->first();
             $suhu = [];
