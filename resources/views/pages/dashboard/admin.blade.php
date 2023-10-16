@@ -13,6 +13,16 @@
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}" />
         <style>
+            .btn-square-lg {
+                width: 150px !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                height: 150px !important;
+                text-align: center;
+                padding: 0px;
+                font-size: 18px;
+            }
+
             .progress-bar-vertical {
                 width: 52px;
                 min-height: 269px;
@@ -191,38 +201,32 @@
                     </div>
                     <div class="row justify-content-around">
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="1"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="1">
                                 PH UP
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="2"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="2">
                                 PH DOWN
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="3"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="3">
                                 UP A
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="4"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="4">
                                 UP B
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="5"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="5">
                                 Distribusi Air
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="6"
-                                style=" height: 200px; width:200px">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="6">
                                 Pompa
                             </button>
                         </div>
