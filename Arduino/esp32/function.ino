@@ -21,13 +21,13 @@ float bacaSUHU() {
   return voltage;
 }
 int bacaKetinggianAir() {
-  // digitalWrite(trig, LOW);
-  // delayMicroseconds(5);
-  // digitalWrite(trig, HIGH);
-  // delayMicroseconds(10);
-  // digitalWrite(trig, LOW);
-  // long duration = pulseIn(echo, HIGH);
-  // return duration * 0.034 / 2;
-  float voltage = random(1, 50);
-  return voltage;
+  digitalWrite(trig, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  long duration = pulseIn(echo, HIGH);
+  return duration * 0.034 / 2;
+  // float voltage = random(1, 50);
+  // return voltage;
 }

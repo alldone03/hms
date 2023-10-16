@@ -191,37 +191,37 @@
                     </div>
                     <div class="row justify-content-around">
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="1"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="1"
                                 style=" height: 200px; width:200px">
                                 PH UP
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="2"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="2"
                                 style=" height: 200px; width:200px">
                                 PH DOWN
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="3"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="3"
                                 style=" height: 200px; width:200px">
                                 UP A
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="4"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="4"
                                 style=" height: 200px; width:200px">
                                 UP B
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="5"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="5"
                                 style=" height: 200px; width:200px">
                                 Distribusi Air
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="6"
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="6"
                                 style=" height: 200px; width:200px">
                                 Pompa
                             </button>

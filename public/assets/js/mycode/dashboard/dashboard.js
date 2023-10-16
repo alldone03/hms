@@ -133,7 +133,7 @@ $(document).ready(function () {
                     myserver + "/dashboard/getdata/" + $("#selectdevice").val(),
                 success: function (data) {
                     data.datarelay.forEach((element, index) => {
-                        if (element) {
+                        if (element == "1") {
                             $(`.mybtncontrol[mybtn-attr-id="${index}"]`)
                                 .removeClass("btn-outline-secondary")
                                 .removeClass("btn-outline-danger")

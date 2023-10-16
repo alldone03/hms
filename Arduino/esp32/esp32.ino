@@ -73,7 +73,7 @@ Pin Setup
 #define buzzer 27
 #define ledesp 2
 
-const uint8_t relay[6] = { 13, 4, 17, 16, 18, 19 };
+const int relay[6] = { 13, 4, 17, 16, 18, 19 };
 enum accRelay {
   PH_UP,
   PH_DOWN,
@@ -82,9 +82,9 @@ enum accRelay {
   Distribusi_Air,
   Pompa,
 };
-uint8_t datarelay[6];
+int datarelay[6];
 // const String host = "http://ip.jsontest.com/?callback=showMyIP";
-const String host = "http://10.17.35.208:8001";
+const String host = "http://hysage.wroindonesia.org";
 const String namedevice = "device1";  // Nama Device
 const int updateSetiap = 3000;        // update ke server setiap satuan milisecond
 
@@ -132,7 +132,7 @@ void setup() {
   //     ;
   // }
 
-
+  // wm.resetSettings();
   bool res = wm.autoConnect("HySage", "12345678");
   if (!res) {
     Serial.println("Failed to Connect");
@@ -144,40 +144,55 @@ void setup() {
   }
   for (uint8_t i = 0; i < 2; i++) {
     digitalWrite(buzzer, 1);
+    digitalWrite(ledesp, 1);
     delay(200);
     digitalWrite(buzzer, 0);
+    digitalWrite(ledesp, 0);
     delay(200);
   }
-
-  digitalWrite(ledesp, 1);
 }
-
+// void loop() {
+//   Serial.println((String)(20 - bacaKetinggianAir()));
+//   delay(1000);
+// }
 
 void loop() {
 
   // koding kirim data
+
   if (millis() - last_millis >= updateSetiap) {
+    // Serial.print(".");
+    // for (uint8_t i = 0; i < 6; i++) {
 
-    for (uint8_t i = 0; i < 6; i++) {
-
-      datarelay[i] = digitalRead(relay[i]);
-    }
+    //   datarelay[i] = digitalRead(relay[i]);
+    //   Serial.print(datarelay[i]);
+    // }
+    // Serial.println(".");
     last_millis = millis();
     HTTPClient http;
-    Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
+    // Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
     http.begin(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
 
     int httpCode = http.GET();
     if (httpCode > 0) {
+      digitalWrite(ledesp, 1);
       String payload = http.getString();
-      Serial.println(payload);
-      for (uint8_t i = 0; i < 7; i++)
-        if (i > 0)
-          digitalWrite(relay[i], payload.substring(i, i + 1).toInt());
-        else if (Auto_state == 0)
+      // Serial.println(payload);
+      // for (int i = 0; i < payload.length(); i++) {
+      //   Serial.println((String)i + ":" + (String)payload.substring(i, i + 1));
+      // }
+      for (uint8_t i = 1; i < 7; i++)
+        if (i == 1) {
+          // digitalWrite(relay[i], payload.substring(0, i + 1).toInt());
+          // Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
           Auto_state = payload.substring(i, i + 1).toInt();
+        } else if (i > 1) {
+          digitalWrite(relay[i - 2], payload.substring(i, i + 1).toInt());
+          // Serial.println((String)i + ":" + (String)payload.substring(i, i + 1).toInt());
+        }
     } else {
       Serial.println("Error: " + httpCode);
+      digitalWrite(ledesp, 0);
     }
     http.end();
   }
@@ -188,7 +203,7 @@ void loop() {
   //setiap pengecekan dilakukan setiap 2 detik untuk data
   //setelah pengecekan 1 menit pengecekan ini untuk mengendalikan pompa
 
-
+  //0100101
   //koding mengendalikan pompa
   if (millis() - millis_1min > 60000 && Auto_state == 1) {
     millis_1min = millis();
