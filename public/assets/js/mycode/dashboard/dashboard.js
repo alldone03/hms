@@ -52,17 +52,31 @@ $(document).ready(function () {
         var id = $(this).attr("mybtn-attr-id");
 
         btncontrol[id] = btncontrol[id] == 0 ? 1 : 0;
-        Toastify({
-            text:
-                controlrelayname[id] +
-                " " +
-                `${btncontrol[id] != 1 ? "ON" : "OFF"}`,
-            duration: 3000,
-            close: true,
-            gravity: "top",
-            position: "right",
-            backgroundColor: btncontrol[id] != 1 ? "#4fbe87" : "#dc3545",
-        }).showToast();
+        if (id == 0) {
+            Toastify({
+                text:
+                    controlrelayname[id] +
+                    " " +
+                    `${btncontrol[id] != 1 ? "ON" : "OFF"}`,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: btncontrol[id] != 1 ? "#4fbe87" : "#dc3545",
+            }).showToast();
+        } else {
+            Toastify({
+                text:
+                    controlrelayname[id] +
+                    " " +
+                    `${btncontrol[id] != 1 ? "ON" : "OFF"}`,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: btncontrol[id] != 1 ? "#4fbe87" : "#dc3545",
+            }).showToast();
+        }
     });
     $("#selectdevice").change(function () {
         btncontrol = [0, 0, 0, 0, 0, 0, 0];
