@@ -57,12 +57,12 @@ $(document).ready(function () {
                 text:
                     controlrelayname[id] +
                     " hello" +
-                    `${btncontrol[id] == 0 ? "ON" : "OFF"}`,
+                    `${btncontrol[id] != 0 ? "ON" : "OFF"}`,
                 duration: 3000,
                 close: true,
                 gravity: "top",
                 position: "right",
-                backgroundColor: btncontrol[id] == 0 ? "#4fbe87" : "#dc3545",
+                backgroundColor: btncontrol[id] != 0 ? "#4fbe87" : "#dc3545",
             }).showToast();
         } else {
             Toastify({
