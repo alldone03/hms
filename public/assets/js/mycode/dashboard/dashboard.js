@@ -57,12 +57,12 @@ $(document).ready(function () {
                 "Relay " +
                 controlrelayname[id] +
                 " " +
-                `${btncontrol[id] == 0 ? "ON" : "OFF"}`,
+                `${btncontrol[id] != 0 ? "ON" : "OFF"}`,
             duration: 3000,
             close: true,
             gravity: "top",
             position: "right",
-            backgroundColor: "#4fbe87",
+            backgroundColor: btncontrol[id] != 0 ? "#4fbe87" : "#dc3545",
         }).showToast();
     });
     $("#selectdevice").change(function () {

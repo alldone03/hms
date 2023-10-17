@@ -82,7 +82,11 @@ Pin Setup
 
 // const int relay[6] = { 13, 5, 17, 16, 18, 19 };
 // const int relay[6] = { 13, 4, 17, 16, 18, 19 };
-const int relay[6] = { 4, 19, 17, 16, 18, 13 };
+const int relay[6] = { 13, 4, 16, 17, 18, 19 };
+// const int relay[6] = { 4, 19, 17, 16, 18, 13 };
+
+
+
 enum accRelay {
   PH_UP,
   PH_DOWN,
@@ -126,6 +130,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   Serial.begin(9600);
   lcd.begin();
+  sensorTemp.begin();
 
   digitalWrite(ledesp, 0);
   for (uint8_t i = 0; i <= 6; i++) {

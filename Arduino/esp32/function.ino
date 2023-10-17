@@ -15,10 +15,10 @@ int bacaTDS() {
 }
 float bacaSUHU() {
 
-  // sensorTemp.requestTemperatures();
-  // return sensorTemp.getTempCByIndex(0);
-  float voltage = random(1, 50) / 100.0;
-  return voltage;
+  sensorTemp.requestTemperatures();
+  return sensorTemp.getTempCByIndex(0);
+  // float voltage = random(1, 50) / 100.0;
+  // return voltage;
 }
 int bacaKetinggianAir() {
   digitalWrite(trig, LOW);
