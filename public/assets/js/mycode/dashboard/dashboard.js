@@ -57,7 +57,7 @@ $(document).ready(function () {
                 "Relay " +
                 controlrelayname[id] +
                 " " +
-                `${btncontrol[id] == 1 ? "ON" : "OFF"}`,
+                `${btncontrol[id] == 0 ? "ON" : "OFF"}`,
             duration: 3000,
             close: true,
             gravity: "top",

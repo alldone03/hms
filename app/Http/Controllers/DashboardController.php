@@ -42,6 +42,7 @@ class DashboardController extends Controller
                     'relay_4' => request()->buttonstate[4],
                     'relay_5' => request()->buttonstate[5],
                     'relay_6' => request()->buttonstate[6],
+
                 ]);
             }
 

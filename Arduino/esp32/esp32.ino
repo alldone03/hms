@@ -6,11 +6,16 @@
 #include <WiFiManager.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
+
 class ard {
+
+
 public:
+
   int statephup, statephdown, statephmode, stateflagphdown, stateflagphup;
   float BatasBawah, BatasAtas;
   unsigned long millis_3secdown, millis_3secup;
+
   ard(float dataBatasBawah, float dataBatasAtas) {
     BatasBawah = dataBatasAtas;
     BatasAtas = dataBatasBawah;
@@ -72,8 +77,12 @@ Pin Setup
 #define suhu 26
 #define buzzer 27
 #define ledesp 2
+#define sdapin 21
+#define sclpin 22
 
-const int relay[6] = { 13, 4, 17, 16, 18, 19 };
+// const int relay[6] = { 13, 5, 17, 16, 18, 19 };
+// const int relay[6] = { 13, 4, 17, 16, 18, 19 };
+const int relay[6] = { 4, 19, 17, 16, 18, 13 };
 enum accRelay {
   PH_UP,
   PH_DOWN,
@@ -85,6 +94,7 @@ enum accRelay {
 int datarelay[6];
 // const String host = "http://ip.jsontest.com/?callback=showMyIP";
 const String host = "http://hysage.wroindonesia.org";
+// const String host = "http://";
 const String namedevice = "device1";  // Nama Device
 const int updateSetiap = 3000;        // update ke server setiap satuan milisecond
 
@@ -115,11 +125,12 @@ void WiFiEvent(WiFiEvent_t event) {
 void setup() {
   WiFi.mode(WIFI_STA);
   Serial.begin(9600);
+  lcd.begin();
 
   digitalWrite(ledesp, 0);
   for (uint8_t i = 0; i <= 6; i++) {
     pinMode(relay[i], OUTPUT);
-    digitalWrite(relay[i], 0);
+    // digitalWrite(relay[i], 0);
   }
   pinMode(trig, OUTPUT);
   pinMode(buzzer, OUTPUT);
@@ -164,8 +175,8 @@ void loop() {
     // Serial.print(".");
     for (uint8_t i = 0; i < 6; i++) {
 
-      datarelay[i] = digitalRead(relay[i]);
-      // Serial.print(datarelay[i]);
+      datarelay[i] = !digitalRead(relay[i]);
+      Serial.print(datarelay[i]);
     }
     Serial.println("");
     last_millis = millis();
@@ -181,19 +192,22 @@ void loop() {
       // for (int i = 0; i < payload.length(); i++) {
       //   Serial.println((String)i + ":" + (String)payload.substring(i, i + 1));
       // }
-      for (uint8_t i = 1; i <= 7; i++)
+      for (uint8_t i = 7; i >= 1; i--)
         if (i == 1) {
-          // digitalWrite(relay[i], payload.substring(0, i + 1).toInt());
-          // Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
+
+          Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
           Auto_state = payload.substring(i, i + 1).toInt();
         } else if (i > 1 && Auto_state == 0) {
+          Serial.println(payload);
           digitalWrite(relay[i - 2], payload.substring(i, i + 1).toInt());
-          // Serial.println((String)i + ":" + (String)payload.substring(i, i + 1).toInt());
+          Serial.println((String)relay[i - 2] + ":" + (String)payload.substring(i, i + 1).toInt());
         }
     } else {
       Serial.println("Error: " + httpCode);
       digitalWrite(ledesp, 0);
     }
+
+    // Serial.println(Auto_state);
     http.end();
   }
   //------------------------------------
@@ -214,7 +228,7 @@ void loop() {
     checksensorPH.CheckRangeSensor(phAir);
   }
   //---------------------------------
-  if (Auto_state != 1) {
+  if (Auto_state == 1) {
     checksensorPH.motorActiveCheckDown(relay[PH_DOWN]);
     checksensorPH.motorActiveCheckUp(relay[PH_UP]);
   }
