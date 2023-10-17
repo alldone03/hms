@@ -56,7 +56,7 @@ $(document).ready(function () {
             Toastify({
                 text:
                     controlrelayname[id] +
-                    " " +
+                    " hello" +
                     `${btncontrol[id] == 0 ? "ON" : "OFF"}`,
                 duration: 3000,
                 close: true,
