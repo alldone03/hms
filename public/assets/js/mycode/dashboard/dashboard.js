@@ -54,7 +54,6 @@ $(document).ready(function () {
         btncontrol[id] = btncontrol[id] == 0 ? 1 : 0;
         Toastify({
             text:
-                "Relay " +
                 controlrelayname[id] +
                 " " +
                 `${btncontrol[id] != 0 ? "ON" : "OFF"}`,
