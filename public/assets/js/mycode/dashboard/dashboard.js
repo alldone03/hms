@@ -69,12 +69,12 @@ $(document).ready(function () {
                 text:
                     controlrelayname[id] +
                     " " +
-                    `${btncontrol[id] != 1 ? "ON" : "OFF"}`,
+                    `${btncontrol[id] == 1 ? "ON" : "OFF"}`,
                 duration: 3000,
                 close: true,
                 gravity: "top",
                 position: "right",
-                backgroundColor: btncontrol[id] != 1 ? "#4fbe87" : "#dc3545",
+                backgroundColor: btncontrol[id] == 1 ? "#4fbe87" : "#dc3545",
             }).showToast();
         }
     });
