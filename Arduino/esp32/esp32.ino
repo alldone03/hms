@@ -100,7 +100,7 @@ int datarelay[6];
 const String host = "http://hysage.wroindonesia.org";
 // const String host = "http://";
 const String namedevice = "device1";  // Nama Device
-const int updateSetiap = 3000;        // update ke server setiap satuan milisecond
+const int updateSetiap = 1000;        // update ke server setiap satuan milisecond
 
 
 /*
@@ -131,24 +131,34 @@ void setup() {
   Serial.begin(9600);
   lcd.begin();
   sensorTemp.begin();
+  lcd.setCursor(5, 0);
+  lcd.print("HySage");
+  lcd.setCursor(3, 1);
+  lcd.print("Hidroponik");
 
   digitalWrite(ledesp, 0);
   for (uint8_t i = 0; i <= 6; i++) {
     pinMode(relay[i], OUTPUT);
-    // digitalWrite(relay[i], 0);
+    digitalWrite(relay[i], 1);
   }
   pinMode(trig, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(ledesp, OUTPUT);
   pinMode(echo, INPUT);
+  pinMode(0, INPUT);
 
-  // if (!ads.begin()) {
-  //   Serial.println("Failed to initialize ADS.");
-  //   while (1)
-  //     ;
-  // }
 
-  // wm.resetSettings();
+  if (digitalRead(0) == 0) {
+    wm.resetSettings();
+    for (uint8_t i = 0; i < 4; i++) {
+      digitalWrite(buzzer, 1);
+      digitalWrite(ledesp, 1);
+      delay(200);
+      digitalWrite(buzzer, 0);
+      digitalWrite(ledesp, 0);
+      delay(200);
+    }
+  }
   bool res = wm.autoConnect("HySage", "12345678");
   if (!res) {
     Serial.println("Failed to Connect");
@@ -161,10 +171,15 @@ void setup() {
   for (uint8_t i = 0; i < 2; i++) {
     digitalWrite(buzzer, 1);
     digitalWrite(ledesp, 1);
-    delay(200);
+    delay(100);
     digitalWrite(buzzer, 0);
     digitalWrite(ledesp, 0);
-    delay(200);
+    delay(100);
+  }
+  if (!ads.begin()) {
+    Serial.println("Failed to initialize ADS.");
+    while (1)
+      ;
   }
 }
 // void loop() {
@@ -200,12 +215,12 @@ void loop() {
       for (uint8_t i = 7; i >= 1; i--)
         if (i == 1) {
 
-          Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
+          // Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
           Auto_state = payload.substring(i, i + 1).toInt();
         } else if (i > 1 && Auto_state == 0) {
           Serial.println(payload);
-          digitalWrite(relay[i - 2], payload.substring(i, i + 1).toInt());
-          Serial.println((String)relay[i - 2] + ":" + (String)payload.substring(i, i + 1).toInt());
+          digitalWrite(relay[i - 2], !payload.substring(i, i + 1).toInt()); 
+          // Serial.println((String)relay[i - 2] + ":" + (String)payload.substring(i, i + 1).toInt());
         }
     } else {
       Serial.println("Error: " + httpCode);
