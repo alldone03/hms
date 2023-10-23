@@ -196,9 +196,9 @@ void loop() {
     for (uint8_t i = 0; i < 6; i++) {
 
       datarelay[i] = !digitalRead(relay[i]);
-      Serial.print(datarelay[i]);
+      // Serial.print(datarelay[i]);
     }
-    Serial.println("");
+    // Serial.println("");
     last_millis = millis();
     HTTPClient http;
     // Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
@@ -218,8 +218,8 @@ void loop() {
           // Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
           Auto_state = payload.substring(i, i + 1).toInt();
         } else if (i > 1 && Auto_state == 0) {
-          Serial.println(payload);
-          digitalWrite(relay[i - 2], !payload.substring(i, i + 1).toInt()); 
+          // Serial.println(payload);
+          digitalWrite(relay[i - 2], !payload.substring(i, i + 1).toInt());
           // Serial.println((String)relay[i - 2] + ":" + (String)payload.substring(i, i + 1).toInt());
         }
     } else {

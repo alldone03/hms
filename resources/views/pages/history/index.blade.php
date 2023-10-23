@@ -182,11 +182,11 @@
 
                             <div class="col-md-4">
                                 <h6 for="startdate">Start Date</h6>
-                                <input type="date" class="form-control" id="startdate">
+                                <input type="date" class="form-control" id="startdate" required>
                             </div>
                             <div class="col-md-4">
                                 <h6 for="enddate">End Date</h6>
-                                <input type="date" class="form-control" id="enddate">
+                                <input type="date" class="form-control" id="enddate" required>
                             </div>
 
 
