@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(HistoryController::class)->prefix('history')->group(function () {
         Route::get('/', 'index')->name('history');
         Route::post('/', 'history')->name('historyget');
+        Route::get('/device', 'history2')->name('historyget2');
     });
     Route::controller(DeviceController::class)->prefix('managedevice')->group(function () {
         Route::get('/', 'index')->name('managedevice');

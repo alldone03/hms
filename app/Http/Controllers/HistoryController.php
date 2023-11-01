@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Device;
 use App\Models\History;
 use App\Models\StateRelay;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -14,10 +15,11 @@ class HistoryController extends Controller
     public function index()
     {
         $device = Device::all();
-        $history = History::all();
-        return view('pages.history.index', compact('device', 'history'));
+
+        return view('pages.history.index2', compact('device'));
     }
     public function logdevice()
+
     {
         $device = Device::where('nama_device', '=', request()->nama_device)->first();
         if ($device != null) {
@@ -108,5 +110,16 @@ class HistoryController extends Controller
                 ]);
             }
         }
+    }
+    public function history2()
+    {
+
+        $data = History::where('device_id', '=', request()->device)->where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->latest()->paginate(10);
+
+        foreach ($data as $key => $value) {
+            $data[$key] = $value;
+            $data[$key]['device'] = $value->device;
+        }
+        return json_encode($data);
     }
 }

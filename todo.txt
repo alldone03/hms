@@ -5,5 +5,5 @@ history:
 if device selected maka tabel akan mengambil data device
 if start date dan end date dipilih dan di click submit maka munculkan data berdasarkan rentang tanggal tersebut
 
-
+membuat data mudah diakses menggunakan api 
 

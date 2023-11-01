@@ -7,65 +7,60 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 
-class ard {
+float calibrationFactor = 75.865;
 
+class ard {
+private:
+  int pinup, pindown;
 
 public:
-
   int statephup, statephdown, statephmode, stateflagphdown, stateflagphup;
   float BatasBawah, BatasAtas;
-  unsigned long millis_3secdown, millis_3secup;
+  uint32_t last_millis;
 
-  ard(float dataBatasBawah, float dataBatasAtas) {
+  ard(float dataBatasBawah, float dataBatasAtas, int pinup, int pindown) {
     BatasBawah = dataBatasAtas;
     BatasAtas = dataBatasBawah;
+    pinup = pinup;
+    pindown = pindown;
   }
 
-  void CheckRangeSensor(float tinggiAir) {
-    if (statephmode == 0) {
+  void CheckRangeSensor(float ketinggian) {
 
-      if (tinggiAir >= BatasAtas) {
-        statephup = 0;
-        statephdown = 1;
-        statephmode = 1;
-        stateflagphdown = 1;
-        millis_3secdown = millis();
-      } else if (tinggiAir <= BatasAtas) {
-        statephup = 1;
-        statephdown = 0;
-        statephmode = 1;
-        stateflagphup = 1;
-        millis_3secup = millis();
+    if (millis() - last_millis < 500) {
+      if (statephup) {
+        digitalWrite(pinup, 1);
       } else {
-        statephup = 0;
-        statephdown = 0;
+        digitalWrite(pinup, 0);
+      }
+      if (statephdown) {
+        digitalWrite(pindown, 1);
+      } else {
+        digitalWrite(pindown, 0);
       }
     } else {
-      if (tinggiAir > (BatasAtas + BatasBawah) / 2 && stateflagphup == 1) {
+      digitalWrite(pinup, 0);
+      digitalWrite(pindown, 0);
+    }
+    if (millis() - last_millis > 10000) {
+      last_millis = millis();
+    }
+    if (statephmode == 0) {
+      if (ketinggian >= BatasAtas) {
         statephup = 0;
+        statephdown = statephmode = stateflagphdown = 1;
+      } else if (ketinggian <= BatasBawah) {
         statephdown = 0;
-        statephmode = 0;
-        stateflagphup = 0;
-      } else if (tinggiAir < (BatasAtas + BatasBawah) / 2 && stateflagphdown == 1) {
-        statephup = 0;
-        statephdown = 0;
-        statephmode = 0;
-        stateflagphdown = 0;
+        statephup = statephmode = stateflagphup = 1;
+      } else {
+        statephup = statephdown = 0;
       }
-    }
-  }
-  void motorActiveCheckDown(uint8_t relay) {
-    if (millis() - millis_3secdown < 3000 && stateflagphdown == 1) {
-      digitalWrite(relay, 1);
-    } else if (stateflagphdown == 0) {
-      digitalWrite(relay, 0);
-    }
-  }
-  void motorActiveCheckUp(uint8_t relay) {
-    if (millis() - millis_3secup < 3000 && stateflagphup == 1) {
-      digitalWrite(relay, 1);
-    } else if (stateflagphup == 0) {
-      digitalWrite(relay, 0);
+    } else {
+      if (ketinggian > (BatasAtas + BatasBawah) / 2 && stateflagphup == 1) {
+        statephup = statephdown = statephmode = stateflagphup = 0;
+      } else if (ketinggian < (BatasAtas + BatasBawah) / 2 && stateflagphdown == 1) {
+        statephup = statephdown = statephmode = stateflagphdown = 0;
+      }
     }
   }
 };
@@ -116,8 +111,8 @@ OneWire oneWire(suhu);
 DallasTemperature sensorTemp(&oneWire);
 WiFiManager wm;
 
-ard checksensorTinggiAir(30.0, 40.0);
-ard checksensorPH(5.0, 8.0);
+ard checksensorTinggiAir(30.0, 40.0, relay[Pompa], relay[Pompa]);
+ard checksensorPH(5.0, 8.0, relay[PH_UP], relay[PH_DOWN]);
 
 
 void WiFiEvent(WiFiEvent_t event) {
@@ -181,13 +176,15 @@ void setup() {
     while (1)
       ;
   }
+  lcd.clear();
 }
-// void loop() {
-//   Serial.println((String)(20 - bacaKetinggianAir()));
-//   delay(1000);
-// }
-
 void loop() {
+  bacaPH();
+  // Serial.println((String)(bacaTDS()) + " " + (String)bacaSUHU());
+  delay(2000);
+}
+
+void xloop() {
 
   // koding kirim data
 
@@ -239,18 +236,24 @@ void loop() {
 
   //0100101
   //koding mengendalikan pompa
-  if (millis() - millis_1min > 60000 && Auto_state == 1) {
-    millis_1min = millis();
-    // check keadaan + Ubah Logic
-    int tinggiair = bacaKetinggianAir();
-    int phAir = bacaPH();
-    checksensorTinggiAir.CheckRangeSensor(tinggiair);
-    checksensorPH.CheckRangeSensor(phAir);
-  }
-  //---------------------------------
   if (Auto_state == 1) {
-    checksensorPH.motorActiveCheckDown(relay[PH_DOWN]);
-    checksensorPH.motorActiveCheckUp(relay[PH_UP]);
   }
-  // kendalikan pompa 3 detik
+  int tinggiair = bacaKetinggianAir();
+  int phAir = bacaPH();
+  checksensorTinggiAir.CheckRangeSensor(tinggiair);
+  checksensorPH.CheckRangeSensor(phAir);
+  // if (millis() - millis_1min > 60000 && Auto_state == 1) {
+  //   millis_1min = millis();
+  //   // check keadaan + Ubah Logic
+  //   int tinggiair = bacaKetinggianAir();
+  //   int phAir = bacaPH();
+  //   checksensorTinggiAir.CheckRangeSensor(tinggiair);
+  //   checksensorPH.CheckRangeSensor(phAir);
+  // }
+  // //---------------------------------
+  // if (Auto_state == 1) {
+  //   checksensorPH.motorActiveCheckDown(relay[PH_DOWN]);
+  //   checksensorPH.motorActiveCheckUp(relay[PH_UP]);
+  // }
+  // // kendalikan pompa 3 detik
 }
