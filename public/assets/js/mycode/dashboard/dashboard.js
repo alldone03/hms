@@ -85,6 +85,11 @@ $(document).ready(function () {
                 .removeClass("btn-outline-danger")
                 .removeClass("btn-outline-success")
                 .addClass("btn-outline-secondary");
+            $(".onlineStatusDevice")
+                .html(`<div class="parent bg-secondary text-center text-white rounded-pill text-justify"
+                            style="padding: 0.4rem">
+                            Status Device
+                        </div>`);
         });
         $.ajax({
             type: "GET",
@@ -195,6 +200,20 @@ $(document).ready(function () {
                     datasuhu.reverse();
                     dataketinggianair.reverse();
                     time.reverse();
+                    const mytime = new Date(data.created_at[0]).getTime();
+                    // console.log("mytime", mytime);
+
+                    if (Date.now() - mytime < 10000) {
+                        $(".onlineStatusDevice")
+                            .html(`<div class="parent bg-success text-center text-white rounded-pill text-justify"
+                            style="padding: 0.4rem"> Status Online
+                    </div>`);
+                    } else {
+                        $(".onlineStatusDevice")
+                            .html(`<div class="parent bg-danger text-center text-white rounded-pill text-justify"
+                            style="padding: 0.4rem">Status Offline
+                    </div>`);
+                    }
 
                     chartph.data.labels = time;
                     charttds.data.labels = time;

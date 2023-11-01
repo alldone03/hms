@@ -74,11 +74,11 @@
             }
 
             function toPage(params) {
-                // console.log(params);
+
                 var device = $('#selectdevice').val();
                 var startdate = $('#startdate').val();
                 var enddate = $('#enddate').val();
-                // console.log(startdate);
+
 
                 var no = 0;
                 $('tbody').empty();
@@ -199,8 +199,6 @@
                             $('#submithistory').html(
                                 'Submit\n\n                                    '
                             )
-
-
                             JSON.parse(data).data.forEach(element => {
                                 $('tbody').append('<tr><td>' + element.id + '</td><td>' +
                                     element

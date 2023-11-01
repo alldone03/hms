@@ -89,13 +89,33 @@
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Dashboard</h3>
             </div>
+
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <select class="form-select" name="selectdevice" id="selectdevice">
-                    <option selected="" value="0">-</option>
-                    @foreach ($device as $d)
-                        <option value="{{ $d->id }}">{{ $d->nama_device }}</option>
-                    @endforeach
-                </select>
+                <div class="d-flex justify-content-around">
+
+
+                    <div class="w-25">
+
+                        <select class="form-select" name="selectdevice" id="selectdevice">
+                            <option selected="" value="0">-</option>
+                            @foreach ($device as $d)
+                                <option value="{{ $d->id }}">{{ $d->nama_device }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+
+                    <div class="w-25 onlineStatusDevice ">
+                        <div class="parent bg-secondary text-center text-white rounded-pill text-justify"
+                            style="padding: 0.4rem">
+                            Status Device
+                        </div>
+                    </div>
+
+
+                </div>
+
             </div>
         </div>
     </div>
