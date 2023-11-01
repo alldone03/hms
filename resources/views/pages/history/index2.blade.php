@@ -27,15 +27,6 @@
         <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
         <script src="{{ asset('assets/js/extensions/datatables.min.js') }}"></script>
 
-        {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> --}}
-        {{-- Choise JS --}}
-
-
         <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
         <script src="{{ asset('assets/js/pages/form-element-select.js') }}"></script>
         <script>
@@ -145,27 +136,6 @@
                 document.getElementById('enddate').value = currentDate;
 
 
-                // $('.edit').on("click", function(e) {
-                //     e.preventDefault()
-                //     console.log('hello');
-
-                //     var id = $(this).attr('data-bs-id');
-                //     console.log(id);
-
-                //     // $.ajax({
-                //     //     url: "{{ url()->current() }}/edit/" + id,
-                //     //     type: "GET",
-                //     //     dataType: "json",
-                //     //     success: function(data) {
-
-                //     //         $('#iddevice').val(data.id);
-                //     //         $('#nama_device').val(data.nama_device);
-                //     //         $('#inlineFormEdit').modal('show');
-                //     //     }
-                //     // });
-                // });
-
-
                 function convertDateToIndonesianFormat(dateString) {
                     const date = new Date(dateString);
                     const day = date.getDate();
@@ -266,14 +236,6 @@
 
                 });
 
-
-
-                // $('.page-link').on("click", function(e) {
-                //     e.preventDefault();
-                //     var link = $(this).attr('attr-value')
-                //     console.log(link);
-
-                // })
 
             });
         </script>
