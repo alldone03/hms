@@ -233,5 +233,5 @@ $(document).ready(function () {
         }
 
         //chart update
-    }, 2000);
+    }, 1000);
 });

@@ -7,3 +7,6 @@ if start date dan end date dipilih dan di click submit maka munculkan data berda
 
 membuat data mudah diakses menggunakan api 
 
+
+print data to excel and csv and to pdf
+

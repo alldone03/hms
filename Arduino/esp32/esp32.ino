@@ -178,13 +178,13 @@ void setup() {
   }
   lcd.clear();
 }
-void loop() {
+void xloop() {
   bacaPH();
-  // Serial.println((String)(bacaTDS()) + " " + (String)bacaSUHU());
+  
   delay(2000);
 }
 
-void xloop() {
+void loop() {
 
   // koding kirim data
 
@@ -198,17 +198,14 @@ void xloop() {
     // Serial.println("");
     last_millis = millis();
     HTTPClient http;
-    // Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
+    Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
     http.begin(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
 
     int httpCode = http.GET();
     if (httpCode > 0) {
       digitalWrite(ledesp, 1);
       String payload = http.getString();
-      // Serial.println(payload);
-      // for (int i = 0; i < payload.length(); i++) {
-      //   Serial.println((String)i + ":" + (String)payload.substring(i, i + 1));
-      // }
+     
       for (uint8_t i = 7; i >= 1; i--)
         if (i == 1) {
 
@@ -237,11 +234,11 @@ void xloop() {
   //0100101
   //koding mengendalikan pompa
   if (Auto_state == 1) {
+    int tinggiair = bacaKetinggianAir();
+    int phAir = bacaPH();
+    checksensorTinggiAir.CheckRangeSensor(tinggiair);
+    checksensorPH.CheckRangeSensor(phAir);
   }
-  int tinggiair = bacaKetinggianAir();
-  int phAir = bacaPH();
-  checksensorTinggiAir.CheckRangeSensor(tinggiair);
-  checksensorPH.CheckRangeSensor(phAir);
   // if (millis() - millis_1min > 60000 && Auto_state == 1) {
   //   millis_1min = millis();
   //   // check keadaan + Ubah Logic

@@ -13,14 +13,14 @@ float bacaPH() {
   while ((millis() - startTime) < sampleDuration) {
     double RawCurrentIn = ads.readADC_SingleEnded(1) * (6.144f / (32768 >> 0));
     rSquaredSum += RawCurrentIn;
-    sampleCount++;  
+    sampleCount++;
   }
   float voltage = (rSquaredSum / sampleCount);
   // y = (-7.1053 * voltage) + 37.844;
   if (voltage > 4.8) {
     y = 0.835416667 * voltage;
   } else {
-    y = (-5.4258 * voltage) + 30.248  ;
+    y = (-5.4258 * voltage) + 30.248;
   }
 
   lcd.setCursor(0, 0);
@@ -29,10 +29,10 @@ float bacaPH() {
   lcd.setCursor(0, 1);
   lcd.print("PH: ");
   lcd.print(y, 4);
-  Serial.print("ADC:");
-  Serial.print(ads.readADC_SingleEnded(1));
-  Serial.print(" Volt:");
-  Serial.println(voltage, 4);
+  // Serial.print("ADC:");
+  // Serial.print(ads.readADC_SingleEnded(1));
+  // Serial.print(" Volt:");
+  // Serial.println(voltage, 4);
   return voltage;
 }
 

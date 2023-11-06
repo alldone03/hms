@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Device;
 use App\Models\History;
 use App\Models\StateRelay;
+use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class HistoryController extends Controller
 {
@@ -31,13 +33,16 @@ class HistoryController extends Controller
                 'relaystate_5' => request()->relaystate_5,
                 'relaystate_6' => request()->relaystate_6,
             ]);
-            History::create([
-                'device_id' => $device->id,
-                'suhu' => request()->suhu,
-                'ph' => request()->ph,
-                'tds' => request()->tds,
-                'ketinggian_air' => request()->ketinggian_air,
-            ]);
+
+            if (strtotime(Carbon::now()) - strtotime(history::where('device_id', '=', $device->id)->latest()->first()->created_at) >= 4) {
+                History::create([
+                    'device_id' => $device->id,
+                    'suhu' => request()->suhu,
+                    'ph' => request()->ph,
+                    'tds' => request()->tds,
+                    'ketinggian_air' => request()->ketinggian_air,
+                ]);
+            }
             $dataRelay = StateRelay::where('device_id', '=', $device->id)->first();
             return response()->json(
                 $dataRelay->Auto . $dataRelay->relay_1 . $dataRelay->relay_2 . $dataRelay->relay_3 . $dataRelay->relay_4 . $dataRelay->relay_5 . $dataRelay->relay_6
@@ -48,69 +53,69 @@ class HistoryController extends Controller
             ]);
         }
     }
-    public function history()
-    {
+    // public function history()
+    // {
 
-        if (request()->device == "0") {
+    //     if (request()->device == "0") {
 
-            if (request()->startdate != null && request()->enddate != null) {
-                $history = History::where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->get();
-                foreach ($history as $key => $value) {
-                    $data[$key] = $value;
-                    $data[$key]['device'] = $value->device;
-                }
-                return response()->json([
-                    'message' => "Success",
-                    'history' => $data,
-                ]);
-            } else {
-                // dd('hello');
-                $history = History::all();
-                $data = [];
-                foreach ($history as $key => $value) {
-                    $data[$key] = $value;
-                    $data[$key]['device'] = $value->device;
-                }
-                return response()->json([
-                    'message' => "Success",
-                    'history' => $data,
-                ]);
-            }
-            $history = History::all();
-            foreach ($history as $key => $value) {
-                $data[$key] = $value;
-                $data[$key]['device'] = $value->device;
-            }
-            return response()->json([
-                'message' => "Success",
-                'history' => $data,
-            ]);
-        } else {
-            if (request()->startdate != null && request()->enddate != null) {
-                $history = History::where('device_id', '=', request()->device)->where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->get();
-                $data = [];
-                foreach ($history as $key => $value) {
-                    $data[$key] = $value;
-                    $data[$key]['device'] = $value->device;
-                }
-                return response()->json([
-                    'message' => "Success",
-                    'history' => $data,
-                ]);
-            } else {
-                $history = History::where('device_id', '=', request()->device)->get();
+    //         if (request()->startdate != null && request()->enddate != null) {
+    //             $history = History::where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->get();
+    //             foreach ($history as $key => $value) {
+    //                 $data[$key] = $value;
+    //                 $data[$key]['device'] = $value->device;
+    //             }
+    //             return response()->json([
+    //                 'message' => "Success",
+    //                 'history' => $data,
+    //             ]);
+    //         } else {
 
-                foreach ($history as $key => $value) {
-                    $data[$key] = $value;
-                    $data[$key]['device'] = $value->device;
-                }
-                return response()->json([
-                    'message' => "Success",
-                    'history' => $data,
-                ]);
-            }
-        }
-    }
+    //             $history = History::all();
+    //             $data = [];
+    //             foreach ($history as $key => $value) {
+    //                 $data[$key] = $value;
+    //                 $data[$key]['device'] = $value->device;
+    //             }
+    //             return response()->json([
+    //                 'message' => "Success",
+    //                 'history' => $data,
+    //             ]);
+    //         }
+    //         $history = History::all();
+    //         foreach ($history as $key => $value) {
+    //             $data[$key] = $value;
+    //             $data[$key]['device'] = $value->device;
+    //         }
+    //         return response()->json([
+    //             'message' => "Success",
+    //             'history' => $data,
+    //         ]);
+    //     } else {
+    //         if (request()->startdate != null && request()->enddate != null) {
+    //             $history = History::where('device_id', '=', request()->device)->where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->get();
+    //             $data = [];
+    //             foreach ($history as $key => $value) {
+    //                 $data[$key] = $value;
+    //                 $data[$key]['device'] = $value->device;
+    //             }
+    //             return response()->json([
+    //                 'message' => "Success",
+    //                 'history' => $data,
+    //             ]);
+    //         } else {
+    //             $history = History::where('device_id', '=', request()->device)->get();
+
+    //             foreach ($history as $key => $value) {
+    //                 $data[$key] = $value;
+    //                 $data[$key]['device'] = $value->device;
+    //             }
+    //             return response()->json([
+    //                 'message' => "Success",
+    //                 'history' => $data,
+    //             ]);
+    //         }
+    //     }
+    // }
     public function history2()
     {
 
@@ -121,5 +126,35 @@ class HistoryController extends Controller
             $data[$key]['device'] = $value->device;
         }
         return json_encode($data);
+    }
+
+
+    public function exportcsv()
+    {
+        $products = History::where('device_id', '=', request()->device)->where('created_at', '>=', request()->startdate)->where('created_at', '<=', request()->enddate)->latest()->get();
+
+        $csvFileName = 'Data.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $csvFileName . '"',
+        ];
+
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, ['NamaDevice', 'suhu', 'ph', 'tds', 'ketinggian_air', 'Created_at']); // Add more headers as needed
+
+        foreach ($products as $product) {
+            fputcsv($handle, [
+                $product->device_id,
+                $product->suhu,
+                $product->ph,
+                $product->tds,
+                $product->ketinggian_air,
+                $product->created_at,
+            ]); // Add more fields as needed
+        }
+
+        fclose($handle);
+
+        return Response::make('', 200, $headers);
     }
 }
