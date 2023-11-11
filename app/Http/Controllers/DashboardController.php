@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\devicehave;
 use App\Models\History;
 use App\Models\StateRelay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -13,8 +15,13 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $device = Device::all();
-        return view('pages.dashboard.admin', compact('device'));
+        if (Auth::user()->roles == 1) {
+            $device = Device::all();
+            return view('pages.dashboard.admin', compact('device'));
+        } else {
+            $device = devicehave::where('users', '=', Auth::user()->id)->get();
+            return view('pages.dashboard.user', compact('device'));
+        }
     }
     public function gethistoryfend()
     {

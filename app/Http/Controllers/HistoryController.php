@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\devicehave;
 use App\Models\History;
 use App\Models\StateRelay;
 use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class HistoryController extends Controller
@@ -17,8 +19,18 @@ class HistoryController extends Controller
     public function index()
     {
         $device = Device::all();
+        // dd($device);
+        if (Auth::user()->roles == 1) {
+            return view('pages.history.index2', compact('device'));
+        } else {
+            $device = [];
+            $devicedata = devicehave::where('users', '=', Auth::user()->id)->get();
+            foreach ($devicedata as $key => $value) {
+                array_push($device, ['id' => $value->device['id'], 'nama_device' => $value->device['nama_device']]);
+            }
 
-        return view('pages.history.index2', compact('device'));
+            return view('pages.history.index2', compact('device'));
+        }
     }
     public function logdevice()
 

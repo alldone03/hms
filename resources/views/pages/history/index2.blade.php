@@ -263,7 +263,7 @@
                                         <select class="form-select" name="selectdevice" id="selectdevice" required>
 
                                             @foreach ($device as $d)
-                                                <option value="{{ $d->id }}">{{ $d->nama_device }}</option>
+                                                <option value="{{ $d['id'] }}">{{ $d['nama_device'] }}</option>
                                             @endforeach
                                         </select>
                                     </div>

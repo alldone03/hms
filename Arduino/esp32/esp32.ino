@@ -92,10 +92,10 @@ enum accRelay {
 };
 int datarelay[6];
 // const String host = "http://ip.jsontest.com/?callback=showMyIP";
-const String host = "http://hysage.wroindonesia.org";
-// const String host = "http://";
+// const String host = "http://hysage.wroindonesia.org";
+const String host = "http://192.168.225.110:8001";
 const String namedevice = "device1";  // Nama Device
-const int updateSetiap = 1000;        // update ke server setiap satuan milisecond
+const int updateSetiap = 500;         // update ke server setiap satuan milisecond
 
 
 /*
@@ -180,7 +180,7 @@ void setup() {
 }
 void xloop() {
   bacaPH();
-  
+
   delay(2000);
 }
 
@@ -205,7 +205,7 @@ void loop() {
     if (httpCode > 0) {
       digitalWrite(ledesp, 1);
       String payload = http.getString();
-     
+
       for (uint8_t i = 7; i >= 1; i--)
         if (i == 1) {
 

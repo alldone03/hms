@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(RoleSeeder::class);
         \App\Models\User::factory()->create([
-            'name' => 'aldan',
-            'email' => 'aldan@gmail.com',
-            'password' => bcrypt('aldan123'),
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin123'),
             'roles' => 1
         ]);
         // Device::factory()->create([

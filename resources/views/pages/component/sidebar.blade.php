@@ -4,14 +4,14 @@
         <span>Dashboard</span>
     </a>
 </li>
+<li class="sidebar-item @if (Request::path() == 'history') active @endif">
+    <a href="{{ route('history') }}" class="sidebar-link ">
+        <i class="bi bi-grid-fill"></i>
+        <span>History</span>
+    </a>
+</li>
 
-@if (Auth::user()->role->id == 2 || Auth::user()->role->id == 1)
-    <li class="sidebar-item @if (Request::path() == 'history') active @endif">
-        <a href="{{ route('history') }}" class="sidebar-link ">
-            <i class="bi bi-grid-fill"></i>
-            <span>History</span>
-        </a>
-    </li>
+@if (Auth::user()->role->id == 1)
     <li class="sidebar-item @if (Request::path() == 'managedevice') active @endif">
         <a href="{{ route('managedevice') }}" class="sidebar-link ">
             <i class="bi bi-grid-fill"></i>

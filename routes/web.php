@@ -62,5 +62,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{device}', 'edit')->name('managedevice/edit');
         Route::put('/update/{device}', 'update')->name('managedevice/update');
         Route::delete('/delete/{id}', 'deletedevice')->name('managedevice/delete');
+        Route::post('/bind', 'bindusertodeviceshow')->name('managedevice/bindshow');
+        Route::post('/bindsend', 'bindusertodevice')->name('managedevice/bind');
+        Route::delete('/binddelete/{id}', 'bindusertodevicedelete')->name('managedevice/binddelete');
     });
 });

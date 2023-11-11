@@ -11,12 +11,75 @@
             type="image/png" />
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}" />
+        <style>
+            .btn-square-lg {
+                width: 150px !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                height: 150px !important;
+                text-align: center;
+                padding: 0px;
+                font-size: 18px;
+            }
+
+            .progress-bar-vertical {
+                width: 52px;
+                min-height: 269px;
+                margin-right: 20px;
+                border-radius: 10px !important;
+                display: flex;
+                flex-direction: column-reverse;
+
+            }
+
+            .progress-bar-vertical .progress-bar {
+                width: 100%;
+                height: 0;
+                -webkit-transition: height 0.6s ease;
+                -o-transition: height 0.6s ease;
+                transition: height 0.6s ease;
+
+                display: block;
+            }
+
+            @keyframes grow {
+                from {
+                    transform: scaleY(0);
+                }
+            }
+        </style>
     @endpush
     @push('scripts')
+        <script>
+            const myserver = "{{ url('') }}";
+        </script>
         <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
         <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-
+        <script src="{{ asset('assets/js/extensions/code.jquery.com_jquery-3.7.1.js') }}"></script>
         <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
+        <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
+
+
+        {{-- Gauge --}}
+        <script src="{{ asset('assets/js/extensions/Gauge/highcharts.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/highcharts-more.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/solid-gauge.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/exporting.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/export-data.js') }}"></script>
+        <script src="{{ asset('assets/js/extensions/Gauge/accessibility.js') }}"></script>
+
+
+        {{-- ----- --}}
+        {{-- Chart --}}
+
+
+        <script src="{{ asset('assets/js/extensions/Chart/chart.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/gaugeinit.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/chartinit.js') }}"></script>
+        <script src="{{ asset('assets/js/mycode/dashboard/dashboard.js') }}"></script>
+
+        {{-- ----- --}}
     @endpush
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     @extends('pages.layout')
@@ -26,35 +89,170 @@
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Dashboard</h3>
             </div>
-        </div>
-    </div>
-    <section class="section">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12 col-md-2">
-                        <div class="card" style="outline-color: #435ebe; outline-width: initial; outline-style: dotted;">
-                            <div class="card-content">
-                                <img class="card-img-top img-fluid" src="./assets/compiled/jpg/origami.jpg"
-                                    alt="Card image cap" style="height: 15rem" />
-                                <div class="card-body">
-                                    <h4 class="card-title">Joder Ka D</h4>
-                                    <p class="card-text">
-                                        Harga : 1000rb
-                                    </p>
-                                    <button class="btn btn-primary block">Add To Cart</button>
-                                </div>
-                            </div>
+
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <div class="d-flex justify-content-around">
+
+
+                    <div class="w-25">
+
+                        <select class="form-select" name="selectdevice" id="selectdevice">
+                            <option selected="" value="0">-</option>
+                            @foreach ($device as $d)
+                                <option value="{{ $d->device['id'] }}">{{ $d->device['nama_device'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+
+                    <div class="w-25 onlineStatusDevice ">
+                        <div class="parent bg-secondary text-center text-white rounded-pill text-justify"
+                            style="padding: 0.4rem">
+                            Status Device
                         </div>
                     </div>
 
+
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <section class="section">
+        <div class="row">
 
+
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="container-PH" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="container-TDS" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="container-SUHU" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="container-KetinggianAir" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+    <section>
+        <div class="row">
+
+            <div class="row">
+
+                <div class="col-sm-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Graph PH</h5>
+                            <div class="row justify-content-center">
+                                <canvas id="Chart-PH"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Graph TDS</h5>
+                            <div class="row justify-content-center">
+                                <canvas id="Chart-TDS"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Graph SUHU</h5>
+                            <div class="row justify-content-center">
+                                <canvas id="Chart-SUHU"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Graph Ketinggian Air</h5>
+                            <div class="row justify-content-center">
+                                <canvas id="Chart-ketinggianair"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
 
+        </div>
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <div class="d-flex gap-2">
+                            <h5 style="text-align: center">
+                                Control Relay
+                            </h5>
+                            <div class="btn btn-outline-secondary mybtncontrol" mybtn-attr-id="0">AUTO</div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="1">
+                                PH UP
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="2">
+                                PH DOWN
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="3">
+                                UP A
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="4">
+                                UP B
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="5">
+                                Distribusi Air
+                            </button>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <button class="btn btn-outline-secondary mybtncontrol btn-square-lg" mybtn-attr-id="6">
+                                Pompa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 @endsection
