@@ -75,13 +75,8 @@ Pin Setup
 #define sdapin 21
 #define sclpin 22
 
-// const int relay[6] = { 13, 5, 17, 16, 18, 19 };
-// const int relay[6] = { 13, 4, 17, 16, 18, 19 };
+
 const int relay[6] = { 13, 4, 16, 17, 18, 19 };
-// const int relay[6] = { 4, 19, 17, 16, 18, 13 };
-
-
-
 enum accRelay {
   PH_UP,
   PH_DOWN,
@@ -90,20 +85,22 @@ enum accRelay {
   Distribusi_Air,
   Pompa,
 };
-int datarelay[6];
-// const String host = "http://ip.jsontest.com/?callback=showMyIP";
-// const String host = "http://hysage.wroindonesia.org";
-const String host = "http://192.168.225.110:8001";
-const String namedevice = "device1";  // Nama Device
-const int updateSetiap = 500;         // update ke server setiap satuan milisecond
 
+int datarelay[6];
+
+const String host = "http://monitoring.hysage.my.id";
+const String namedevice = "device1";   // Nama Device
+const int updateSetiap = 500;          // update ke server setiap satuan milisecond
+const int pompaoninsec = 60 * 5;       // 5 menit menyala
+const int pompaoffinsecond = 60 * 12;  // 12 menit mati
 
 /*
 -------------------
 */
 
-uint8_t Auto_state = 1;
-unsigned long last_millis, millis_1min, millis_3sec;
+uint8_t Auto_state = 1, flagpompaon = 0;
+unsigned long last_millis, millis_1min, millis_3sec, millis_pompaon, millis_pompaoff;
+
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Adafruit_ADS1115 ads;
@@ -139,11 +136,11 @@ void setup() {
   pinMode(trig, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(ledesp, OUTPUT);
+  pinMode(25, INPUT_PULLUP);
   pinMode(echo, INPUT);
-  pinMode(0, INPUT);
 
 
-  if (digitalRead(0) == 0) {
+  if (digitalRead(25) == 0) {
     wm.resetSettings();
     for (uint8_t i = 0; i < 4; i++) {
       digitalWrite(buzzer, 1);
@@ -178,79 +175,49 @@ void setup() {
   }
   lcd.clear();
 }
-void xloop() {
-  bacaPH();
 
-  delay(2000);
-}
 
 void loop() {
-
-  // koding kirim data
-
   if (millis() - last_millis >= updateSetiap) {
-    // Serial.print(".");
     for (uint8_t i = 0; i < 6; i++) {
-
       datarelay[i] = !digitalRead(relay[i]);
-      // Serial.print(datarelay[i]);
     }
-    // Serial.println("");
     last_millis = millis();
     HTTPClient http;
     Serial.println(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
     http.begin(host + "/logdevice?nama_device=device1&relaystate_1=" + String(datarelay[0]) + "&relaystate_2=" + String(datarelay[1]) + "&relaystate_3=" + String(datarelay[2]) + "&relaystate_4=" + String(datarelay[3]) + "&relaystate_5=" + String(datarelay[4]) + "&relaystate_6=" + String(datarelay[5]) + "&suhu=" + String(bacaSUHU()) + "&ph=" + String(bacaPH()) + "&tds=" + String(bacaTDS()) + "&ketinggian_air=" + String(bacaKetinggianAir()));
-
     int httpCode = http.GET();
     if (httpCode > 0) {
       digitalWrite(ledesp, 1);
       String payload = http.getString();
-
       for (uint8_t i = 7; i >= 1; i--)
         if (i == 1) {
-
-          // Serial.println((String)i + ":u" + (String)payload.substring(i, i + 1).toInt());
           Auto_state = payload.substring(i, i + 1).toInt();
         } else if (i > 1 && Auto_state == 0) {
-          // Serial.println(payload);
           digitalWrite(relay[i - 2], !payload.substring(i, i + 1).toInt());
-          // Serial.println((String)relay[i - 2] + ":" + (String)payload.substring(i, i + 1).toInt());
         }
     } else {
       Serial.println("Error: " + httpCode);
       digitalWrite(ledesp, 0);
     }
-
-    // Serial.println(Auto_state);
     http.end();
+    millis_pompaon = millis();
   }
-  //------------------------------------
-  // Check Every 1 mnt if auto on cairan larut kemudian akan di cek kembali setiap 1 menit
-  // Lama dari pompa menyala 3 detik dan menyimpan posisi menunggu check kembali
 
-  //setiap pengecekan dilakukan setiap 2 detik untuk data
-  //setelah pengecekan 1 menit pengecekan ini untuk mengendalikan pompa
-
-  //0100101
-  //koding mengendalikan pompa
   if (Auto_state == 1) {
     int tinggiair = bacaKetinggianAir();
     int phAir = bacaPH();
     checksensorTinggiAir.CheckRangeSensor(tinggiair);
     checksensorPH.CheckRangeSensor(phAir);
+
+    if (millis() - millis_pompaon < pompaoninsec * 1000) {
+      digitalWrite(relay[Pompa], 1);
+      millis_pompaoff = millis();
+    } else {
+      if (millis() - millis_pompaoff < pompaoffinsecond * 1000)
+        digitalWrite(relay[Pompa], 0);
+      else
+        millis_pompaon = millis();
+    }
   }
-  // if (millis() - millis_1min > 60000 && Auto_state == 1) {
-  //   millis_1min = millis();
-  //   // check keadaan + Ubah Logic
-  //   int tinggiair = bacaKetinggianAir();
-  //   int phAir = bacaPH();
-  //   checksensorTinggiAir.CheckRangeSensor(tinggiair);
-  //   checksensorPH.CheckRangeSensor(phAir);
-  // }
-  // //---------------------------------
-  // if (Auto_state == 1) {
-  //   checksensorPH.motorActiveCheckDown(relay[PH_DOWN]);
-  //   checksensorPH.motorActiveCheckUp(relay[PH_UP]);
-  // }
-  // // kendalikan pompa 3 detik
 }
